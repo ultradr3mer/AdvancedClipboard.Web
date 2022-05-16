@@ -28,13 +28,7 @@
           <li class="nav-item">
             <a class="nav-link @(ViewData["Title"] as string == "Home" ? "text-primary" : "")" aria-current="page" asp-controller="home" asp-action="index">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link @(ViewData["Title"] as string == "Projects" ? "text-primary" : "")" aria-current="page" asp-controller="home" asp-action="projects">Projects</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link @(ViewData["Title"] as string == "Timeline" ? "text-primary" : "")" aria-current="page" asp-controller="home" asp-action="timeline">Timeline</a>
-          </li>
-          @*<partial name="_LoginPartial" />*@
+          <partial name="_LoginPartial" />
         </ul>
       </div>
     </div>

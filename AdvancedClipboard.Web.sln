@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedClipboard.Web", "AdvancedClipboard.Web\AdvancedClipboard.Web.csproj", "{4408B5B6-303A-4807-9EA4-E8A81856CC4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdvancedClipboard.Web", "AdvancedClipboard.Web\AdvancedClipboard.Web.csproj", "{4408B5B6-303A-4807-9EA4-E8A81856CC4C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scavvolding", "Scavvolding\Scavvolding.csproj", "{2D28CF3C-B53E-4210-B0D8-1B71A0CBE4D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4408B5B6-303A-4807-9EA4-E8A81856CC4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4408B5B6-303A-4807-9EA4-E8A81856CC4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4408B5B6-303A-4807-9EA4-E8A81856CC4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D28CF3C-B53E-4210-B0D8-1B71A0CBE4D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D28CF3C-B53E-4210-B0D8-1B71A0CBE4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D28CF3C-B53E-4210-B0D8-1B71A0CBE4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D28CF3C-B53E-4210-B0D8-1B71A0CBE4D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
