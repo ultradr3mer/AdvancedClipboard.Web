@@ -12,6 +12,14 @@ namespace AdvancedClipboard.Web.Models
 
         }
 
+        public DbSet<ClipboardContentEntity> ClipboardContent { get; set; }
+
+        public DbSet<ContentTypeEntity> ContentType { get; set; }
+
+        public DbSet<FileAccessTokenEntity> FileAccessToken { get; set; }
+
+        public DbSet<LaneEntity> Lane { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
