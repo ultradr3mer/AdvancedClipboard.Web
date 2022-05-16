@@ -1,50 +1,68 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - AdvancedClipboard.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AdvancedClipboard.Web.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AdvancedClipboard.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - AdvancedClipboard.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="~/lib/bootstrap-4.6.0/scss/custom-bootstrap.min.css" />
+  <link rel="stylesheet" href="~/css/site.css" />
+
+  <title>@ViewBag.Title</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-md navbar-dark bg-light shadow-a">
+    <div class="container-fluid container navbar-container">
+      <div class="logo-div bg-primary mr-2">
+        <img class="logo" src="~/images/clipboard.svg" />
+      </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link @(ViewData["Title"] as string == "Home" ? "text-primary" : "")" aria-current="page" asp-controller="home" asp-action="index">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link @(ViewData["Title"] as string == "Projects" ? "text-primary" : "")" aria-current="page" asp-controller="home" asp-action="projects">Projects</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link @(ViewData["Title"] as string == "Timeline" ? "text-primary" : "")" aria-current="page" asp-controller="home" asp-action="timeline">Timeline</a>
+          </li>
+          @*<partial name="_LoginPartial" />*@
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  @RenderBody()
+
+  <footer class="p-2 bg-light shadow-a">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+          <h4>This Page</h4>
+          <div>
+            <span class="footer-bullet mr-1">›</span> This page is non-commercial research project on portfolio creation.<br />
+            <span class="footer-bullet mr-1">›</span> However, the sourcecode is available on <a href="https://github.com/ultradr3mer/ClaraOriginal">Github</a>.
+          </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+        <div class="col-12 col-md-6 mb-3">
+          <h4>Copyright</h4>
+          <div class="vertical-alignment-container">
+            <p>&copy; Clara Schulz-Thei&szlig;en 2022<br />all rights reserved</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+  <script src="~/lib/bootstrap-4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+  @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

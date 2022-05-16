@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
     <None Include="wwwroot\lib\bootstrap-4.6.0\.github\CODEOWNERS" />
     <None Include="wwwroot\lib\bootstrap-4.6.0\.github\CONTRIBUTING.md" />
     <None Include="wwwroot\lib\bootstrap-4.6.0\.github\ISSUE_TEMPLATE\bug_report.md" />

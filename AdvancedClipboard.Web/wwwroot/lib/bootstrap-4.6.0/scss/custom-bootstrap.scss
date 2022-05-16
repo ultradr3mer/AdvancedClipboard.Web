@@ -8,19 +8,21 @@
 @import "functions";
 @import "variables";
 
+$primary: #0078d7;
+$secondary: #e6e6e6;
+$light: #404040;
+$medium: #303030;
+$dark: #212121;
+
 $theme-colors: (
-  "primary": #e91e63,
-  "secondary": #9d9d9d,
-  "light": #343a40,
-  "medium": #252b30,
-  "dark": #171c21
+  "primary": $primary,
+  "secondary": $secondary,
+  "light": $light,
+  "medium": $medium,
+  "dark": $dark
 );
 
-$primary: #e91e63;
-$secondary: #9d9d9d;
-$light: #343a40;
-$medium: #252b30;
-$dark: #171c21;
+
 
 $body-bg: $light;
 $body-color: #e6e6e6;
