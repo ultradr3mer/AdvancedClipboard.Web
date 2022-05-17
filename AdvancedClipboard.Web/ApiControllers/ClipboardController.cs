@@ -9,6 +9,7 @@ using AdvancedClipboard.Web.Extensions;
 using AdvancedClipboard.Server.Constants;
 using AdvancedClipboard.Server.Repositories;
 using Microsoft.Identity.Web;
+using AdvancedClipboard.Web.Repositories;
 
 namespace AdvancedClipboard.Web.ApiControllers
 {
@@ -20,14 +21,16 @@ namespace AdvancedClipboard.Web.ApiControllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly FileRepository fileRepository;
         ApplicationDbContext context;
+        private readonly ClipboardRepository clipboardRepository;
 
         #region Constructors
 
-        public ClipboardController(SignInManager<ApplicationUser> _signInManager, FileRepository fileRepository, ApplicationDbContext context)
+        public ClipboardController(SignInManager<ApplicationUser> _signInManager, FileRepository fileRepository, ApplicationDbContext context, ClipboardRepository clipboardRepository)
         {
             signInManager = _signInManager;
             this.fileRepository = fileRepository;
             this.context = context;
+            this.clipboardRepository = clipboardRepository;
         }
 
         #endregion Constructors
@@ -48,36 +51,6 @@ namespace AdvancedClipboard.Web.ApiControllers
             await context.SaveChangesAsync();
 
             return this.Ok();
-        }
-
-        [HttpGet]
-        [Obsolete("Get is deprecated, please use GetWithContext instead.")]
-        public async Task<IEnumerable<ClipboardGetData>> Get(Guid? id = null)
-        {
-            var userId = this.User.GetId();
-
-            var result = await (from cc in context.ClipboardContent
-                                where cc.UserId == userId
-                                && cc.IsArchived == false
-                                && (cc.Id == id || id == null)
-                                select ClipboardGetData.CreateFromEntity(cc, cc.FileToken)).ToListAsync();
-
-            return result;
-        }
-
-        [HttpGet(nameof(GetLane))]
-        [Obsolete("GetLane is deprecated, please use GetLaneWithContext instead.")]
-        public async Task<IEnumerable<ClipboardGetData>> GetLane(Guid lane)
-        {
-            var userId = this.User.GetId();
-
-            var result = await (from cc in context.ClipboardContent
-                                where cc.UserId == userId
-                                && cc.IsArchived == false
-                                && cc.LaneId == lane
-                                select ClipboardGetData.CreateFromEntity(cc, cc.FileToken)).ToListAsync();
-
-            return result;
         }
 
         [HttpGet(nameof(GetLaneWithContext))]
@@ -112,19 +85,7 @@ namespace AdvancedClipboard.Web.ApiControllers
         {
             var userId = this.User.GetId();
 
-            List<ClipboardGetData> entries = await (from cc in context.ClipboardContent
-                                                    where cc.UserId == userId
-                                                    && cc.IsArchived == false
-                                                    && (cc.Id == id || id == null)
-                                                    select ClipboardGetData.CreateFromEntity(cc, cc.FileToken)).ToListAsync();
-
-            List<LaneGetData> lanes = await LaneController.GetLanesForUser(context, userId);
-
-            ClipboardContainerGetData result = new ClipboardContainerGetData()
-            {
-                Entries = entries,
-                Lanes = lanes
-            };
+            var result = await this.clipboardRepository.GetWithContext(id, userId);
 
             return result;
         }

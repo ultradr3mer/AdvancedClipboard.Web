@@ -1,23 +1,26 @@
 body {
     font-family: 'Open Sans', sans-serif;
-    font-size: 1.1em;
+    font-size: 1em;
+    font-weight: 300;
 }
 
 .logo {
     margin: 0;
-    width: 50px;
-    height: 50px;
-}
-
-.logo-div {
-    position: relative;
+    width: 60px;
+    height: 60px;
 }
 
 .navbar {
     padding: 0;
 }
 
-.navbar-container {
-    padding-right: 0px;
-    padding-left: 0px;
+.card-color-edge {
+    height: 100%;
+    position: absolute;
+    width: .3em;
+}
+
+.collapse.show {
+    padding-bottom: .5rem !important;
+    padding-left: .5rem !important;
 }

@@ -29,6 +29,11 @@ namespace AdvancedClipboard.Web.ApiControllers
             this.context = context;
         }
 
+        internal static Task<List<LaneGetData>> GetLanesForUser(object context, Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion Constructors
 
         #region Methods

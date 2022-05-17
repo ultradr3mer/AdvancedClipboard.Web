@@ -1,4 +1,8 @@
-﻿using AdvancedClipboard.Web.Models;
+﻿using AdvancedClipboard.Web.ApiControllers;
+using AdvancedClipboard.Web.Data;
+using AdvancedClipboard.Web.Extensions;
+using AdvancedClipboard.Web.Models;
+using AdvancedClipboard.Web.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -8,16 +12,20 @@ namespace AdvancedClipboard.Web.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ClipboardRepository repository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ClipboardRepository clipboardController)
         {
-            _logger = logger;
+            this.repository = clipboardController;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(Guid? id = null)
         {
-            return View();
+            var userId = this.User.GetId();
+
+            var data = await this.repository.GetWithContext(id, userId);
+
+            return View(data);
         }
 
         public IActionResult Privacy()

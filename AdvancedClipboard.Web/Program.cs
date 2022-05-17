@@ -1,6 +1,8 @@
 using AdvancedClipboard.Server.Repositories;
+using AdvancedClipboard.Web.ApiControllers;
 using AdvancedClipboard.Web.Models;
 using AdvancedClipboard.Web.Models.Identity;
+using AdvancedClipboard.Web.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
@@ -13,6 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 var storageConnectionString = builder.Configuration.GetConnectionString("AzureStorage_ConnectionString");
 builder.Services.AddAzureClients(builder => builder.AddBlobServiceClient(storageConnectionString));
 builder.Services.AddScoped<FileRepository>();
+builder.Services.AddScoped<ClipboardRepository>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 var clientId = builder.Configuration.GetValue<string>("ClientId");

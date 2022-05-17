@@ -1,18 +1,30 @@
-﻿@{
+﻿@using AdvancedClipboard.Web.Data
+@{
     ViewData["Title"] = "Home Page";
+
+    var laneColors = new Dictionary<Guid, string>() { { Guid.Empty, "transparent" } };
+
+    foreach (var lane in Model.Lanes)
+    {
+        laneColors.Add(lane.Id, lane.Color);
+    }
 }
+@model ClipboardContainerGetData
 
 <main class="bg-dark pb-4">
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h1 class="display-4">Welcome</h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 bg-medium">
-                <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-            </div>
+        <div class="row pt-3 pb-3">
+            @foreach (var entry in Model.Entries)
+            {
+                <div class="col-12 col-md-6 col-lg-3 pb-3 pr-2">
+                    <div class="card text-white bg-medium hadow-sm">
+                        <div class="card card-color-edge" style="background-color: @laneColors[entry.LaneId ?? Guid.Empty] ;" ></div>
+                        <div class="card-body">
+                            <p>@entry.TextContent<p>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </main>
