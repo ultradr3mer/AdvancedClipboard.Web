@@ -13,7 +13,7 @@ namespace AdvancedClipboard.Web.Models
         /// <summary>
         /// The color.
         /// </summary>
-        public string? Color { get; set; }
+        public string Color { get; set; } = string.Empty;
 
         /// <summary>
         /// The id.
@@ -24,7 +24,7 @@ namespace AdvancedClipboard.Web.Models
         /// <summary>
         /// The name.
         /// </summary>
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// The owner.

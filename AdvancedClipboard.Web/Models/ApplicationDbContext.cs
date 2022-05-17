@@ -6,8 +6,12 @@ namespace AdvancedClipboard.Web.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Role, Guid>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+
+        }
+
+        public ApplicationDbContext() : base()
         {
 
         }
