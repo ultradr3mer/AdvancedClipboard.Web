@@ -18,14 +18,15 @@ namespace AdvancedClipboard.Server.Repositories
 
         private readonly Dictionary<string, string> mimeExtensions = new Dictionary<string, string>();
 
-        ApplicationDbContext context = new ApplicationDbContext();
-        private string connectionString;
+        ApplicationDbContext context;
+        private readonly BlobServiceClient client;
 
         #region Constructors
 
-        public FileRepository(IConfiguration configuration)
+        public FileRepository(ApplicationDbContext context, BlobServiceClient client)
         {
-            this.connectionString = configuration["AzureStorage_ConnectionString"];
+            this.context = context;
+            this.client = client;
         }
 
         #endregion Constructors
@@ -128,10 +129,10 @@ namespace AdvancedClipboard.Server.Repositories
         private async Task<BlobContainerClient> GetAzureContainer(string username)
         {
             string containerName = UserContainerPrefix + username.ToLower();
-            BlobContainerClient client = new BlobContainerClient(this.connectionString, containerName);
-            await client.CreateIfNotExistsAsync();
+            var containerClient = this.client.GetBlobContainerClient(containerName);
+            await containerClient.CreateIfNotExistsAsync();
 
-            return client;
+            return containerClient;
         }
 
         private void InitializeMimeTypes(string mimeTypes)

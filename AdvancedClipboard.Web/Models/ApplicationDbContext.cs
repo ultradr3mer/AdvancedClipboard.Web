@@ -11,11 +11,6 @@ namespace AdvancedClipboard.Web.Models
 
         }
 
-        public ApplicationDbContext() : base()
-        {
-
-        }
-
         public DbSet<ClipboardContentEntity> ClipboardContent { get; set; }
 
         public DbSet<ContentTypeEntity> ContentType { get; set; }

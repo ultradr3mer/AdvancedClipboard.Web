@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace AdvancedClipboard.Web.Controllers
+namespace AdvancedClipboard.Web.ApiControllers
 {
     [Authorize]
     [Route("[controller]")]

@@ -10,7 +10,7 @@ using AdvancedClipboard.Server.Constants;
 using AdvancedClipboard.Server.Repositories;
 using Microsoft.Identity.Web;
 
-namespace AdvancedClipboard.Web.Controllers
+namespace AdvancedClipboard.Web.ApiControllers
 {
     [Authorize]
     [Route("[controller]")]
@@ -19,14 +19,15 @@ namespace AdvancedClipboard.Web.Controllers
     {
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly FileRepository fileRepository;
-        ApplicationDbContext context = new ApplicationDbContext();
+        ApplicationDbContext context;
 
         #region Constructors
 
-        public ClipboardController(SignInManager<ApplicationUser> _signInManager, FileRepository fileRepository)
+        public ClipboardController(SignInManager<ApplicationUser> _signInManager, FileRepository fileRepository, ApplicationDbContext context)
         {
             signInManager = _signInManager;
             this.fileRepository = fileRepository;
+            this.context = context;
         }
 
         #endregion Constructors

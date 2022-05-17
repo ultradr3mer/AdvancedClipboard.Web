@@ -9,7 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace AdvancedClipboard.Web.Controllers
+namespace AdvancedClipboard.Web.ApiControllers
 {
     /// <summary>
     /// The <see cref="FileController"/> provides functionality to upload and download files.
@@ -19,14 +19,12 @@ namespace AdvancedClipboard.Web.Controllers
     [ApiController]
     public class FileController : ControllerBase
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly FileRepository fileRepository;
 
         #region Constructors
 
-        public FileController(SignInManager<ApplicationUser> _signInManager, FileRepository fileRepository)
+        public FileController(FileRepository fileRepository)
         {
-            signInManager = _signInManager;
             this.fileRepository = fileRepository;
         }
 
