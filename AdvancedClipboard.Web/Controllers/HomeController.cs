@@ -1,5 +1,5 @@
 ﻿using AdvancedClipboard.Web.ApiControllers;
-using AdvancedClipboard.Web.Data;
+using AdvancedClipboard.Web.Controllers.Model;
 using AdvancedClipboard.Web.Extensions;
 using AdvancedClipboard.Web.Models;
 using AdvancedClipboard.Web.Repositories;
@@ -9,35 +9,41 @@ using System.Diagnostics;
 
 namespace AdvancedClipboard.Web.Controllers
 {
-    [Authorize]
-    public class HomeController : Controller
+  [Authorize]
+  public class HomeController : Controller
+  {
+    private readonly ClipboardRepository repository;
+
+    public HomeController(ClipboardRepository clipboardController)
     {
-        private readonly ClipboardRepository repository;
-
-        public HomeController(ClipboardRepository clipboardController)
-        {
-            this.repository = clipboardController;
-        }
-
-        public async Task<IActionResult> Index(Guid? id = null)
-        {
-            var userId = this.User.GetId();
-
-            var data = await this.repository.GetWithContext(id, userId);
-
-            return View(data);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+      this.repository = clipboardController;
     }
+
+    public async Task<IActionResult> Index(Guid? id = null)
+    {
+      var userId = this.User.GetId();
+
+      var data = await this.repository.GetWithContext(id, userId);
+
+      var model = new HomeIndexModel()
+      {
+        Lanes = data.Lanes.Select(o => new LaneDisplayData(o)).ToList(),
+        Entries = data.Entries,
+      };
+
+      return View(model);
+    }
+
+    public IActionResult Privacy()
+    {
+      return View();
+    }
+
+    [AllowAnonymous]
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+      return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+  }
 }

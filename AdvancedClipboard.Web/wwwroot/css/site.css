@@ -1,26 +1,48 @@
 body {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1em;
-    font-weight: 300;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+  font-weight: 300;
 }
 
 .logo {
-    margin: 0;
-    width: 60px;
-    height: 60px;
+  margin: 0;
+  width: 60px;
+  height: 60px;
 }
 
 .navbar {
-    padding: 0;
+  padding: 0;
+}
+
+.card-color-edge-container {
+  position: absolute;
+  height: 100%;
+  padding: 2px;
 }
 
 .card-color-edge {
-    height: 100%;
-    position: absolute;
-    width: .3em;
+  height: 100%;
+  width: .3em;
 }
 
 .collapse.show {
-    padding-bottom: .5rem !important;
-    padding-left: .5rem !important;
+  padding-bottom: .5rem !important;
+  padding-left: .5rem !important;
+}
+
+.clipboard-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+
+.clipboard-card-body {
+  padding: 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.clipboard-card-header {
+  padding: 0rem;
 }

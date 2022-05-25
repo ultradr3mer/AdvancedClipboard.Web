@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -20,23 +20,12 @@
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\CODEOWNERS" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\CONTRIBUTING.md" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\ISSUE_TEMPLATE\bug_report.md" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\ISSUE_TEMPLATE\feature_request.md" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\SUPPORT.md" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\workflows\browserstack.yml" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\workflows\bundlewatch.yml" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\workflows\codeql.yml" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\workflows\css.yml" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\workflows\dart-sass.yml" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\workflows\docs.yml" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\workflows\js.yml" />
-    <None Include="wwwroot\lib\bootstrap-4.6.0\.github\workflows\lint.yml" />
+    <None Include="wwwroot\lib\icon-font\fonts\bootstrap-icons.woff2" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
+    <PackageReference Include="Mapster" Version="7.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.4" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />

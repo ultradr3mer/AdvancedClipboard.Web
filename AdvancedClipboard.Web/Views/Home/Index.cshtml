@@ -1,30 +1,54 @@
-﻿@using AdvancedClipboard.Web.Data
+﻿@using AdvancedClipboard.Web.Controllers.Model
 @{
-    ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Home Page";
 
-    var laneColors = new Dictionary<Guid, string>() { { Guid.Empty, "transparent" } };
+  var laneColors = Model.Lanes.ToDictionary(o => o.Id, o => o.Color);
+  laneColors.Add(Guid.Empty, "transparent");
 
-    foreach (var lane in Model.Lanes)
-    {
-        laneColors.Add(lane.Id, lane.Color);
-    }
 }
-@model ClipboardContainerGetData
+@model HomeIndexModel
 
 <main class="bg-dark pb-4">
-    <div class="container">
-        <div class="row pt-3 pb-3">
-            @foreach (var entry in Model.Entries)
+  <div class="container">
+    @if (Model?.Lanes != null)
+    {
+      <div class="row pt-3 pb-3">
+
+        <div class="col-12 pb-3">
+
+          <h3>
+            Lanes
+          </h3>
+          <div>
+            @foreach (var lane in Model.Lanes)
             {
-                <div class="col-12 col-md-6 col-lg-3 pb-3 pr-2">
-                    <div class="card text-white bg-medium hadow-sm">
-                        <div class="card card-color-edge" style="background-color: @laneColors[entry.LaneId ?? Guid.Empty] ;" ></div>
-                        <div class="card-body">
-                            <p>@entry.TextContent<p>
-                        </div>
-                    </div>
-                </div>
+              <button type="button" class="btn btn-sm m-1" style="background-color: @lane.Color ; color: @lane.TextColor ;">@lane.Name</button>
             }
+          </div>
         </div>
+      </div>
+    }
+    <div class="row pt-3 pb-3">
+      @foreach (var entry in Model!.Entries)
+      {
+        <div class="col-12 col-md-6 col-lg-3 pb-3 pr-2">
+          <div class="card text-white bg-medium hadow-sm">
+            <div class="card-color-edge-container">
+              <div class="card card-color-edge" style="background-color: @laneColors[entry.LaneId ?? Guid.Empty] ;"></div>
+            </div>
+            <div class="card-header clipboard-card-header">
+              <div class="btn-group btn-group-sm float-right m-1" role="group">
+                <button type="button" class="btn btn-light"><i class="bi bi-pen"></i></button>
+                <button type="button" class="btn btn-light"><i class="bi bi-x-lg"></i></button>
+              </div>
+            </div>
+            <div class="card-body clipboard-card-body">
+              <p class="card-text clipboard-text">@entry.TextContent</p>
+
+            </div>
+          </div>
+        </div>
+      }
     </div>
+  </div>
 </main>

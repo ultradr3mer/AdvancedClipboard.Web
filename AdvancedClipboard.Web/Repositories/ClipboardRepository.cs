@@ -1,11 +1,11 @@
 ﻿using AdvancedClipboard.Web.ApiControllers;
-using AdvancedClipboard.Web.Data;
+using AdvancedClipboard.Web.ApiControllers.Data;
 using AdvancedClipboard.Web.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AdvancedClipboard.Web.Repositories
 {
-    public class ClipboardRepository
+  public class ClipboardRepository
     {
         private readonly ApplicationDbContext context;
 
