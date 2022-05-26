@@ -4,7 +4,7 @@
 
   var laneColors = Model.Lanes.ToDictionary(o => o.Id, o => o.Color);
   laneColors.Add(Guid.Empty, "transparent");
-
+  //Model.ReturnUrl = Context.Request.Path;
 }
 @model HomeIndexModel
 
@@ -22,12 +22,26 @@
           <div>
             @foreach (var lane in Model.Lanes)
             {
-              <button type="button" class="btn btn-sm m-1" style="background-color: @lane.Color ; color: @lane.TextColor ;">@lane.Name</button>
+              <a href="" class="btn btn-sm m-1" style="background-color: @lane.Color ; color: @lane.TextColor ;">@lane.Name</a>
             }
           </div>
         </div>
       </div>
     }
+    <div class="row">
+      <div class="col-12 pr-2">
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { ReturnUrl = Context.Request.Path }))
+        {
+          <div class="input-group">
+            @Html.TextBoxFor(m => m.ContentToAdd, new { @class="form-control bg-medium border-0 text-white", placeholder="Quick add note" })
+            @Html.Hidden(nameof(Model.ReturnUrl), Context.Request.Path, new {})
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit"><i class="bi bi-plus-circle"></i></button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
     <div class="row pt-3 pb-3">
       @foreach (var entry in Model!.Entries)
       {

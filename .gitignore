@@ -351,3 +351,5 @@ MigrationBackup/
 
 # exclude settings file
 *appsettings.Development.json
+
+Scavvolding/

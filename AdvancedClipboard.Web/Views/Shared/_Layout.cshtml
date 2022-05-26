@@ -1,66 +1,65 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="~/lib/bootstrap-4.6.0/scss/custom-bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/lib/icon-font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="~/lib/bootstrap-4.6.0/scss/custom-bootstrap.min.css" />
+  <link rel="stylesheet" href="~/css/site.css" />
+  <link rel="stylesheet" href="~/lib/icon-font/bootstrap-icons.css" />
 
-    <title>@ViewBag.Title</title>
+  <title>@ViewBag.Title</title>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-medium shadow-a">
-        <div class="container-fluid container navbar-container">
-            <a class="navbar-brand p-0 bg-primary mr-2" href="#"><img class="logo" src="~/images/clipboard.svg" /></a>
-            <button class="navbar-toggler bg-primary mr-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewData["Title"] as string == "Home" ? "text-primary" : "")" aria-current="page" asp-controller="home" asp-action="index">Home</a>
-                    </li>
+  <nav class="navbar navbar-expand-md navbar-dark bg-medium shadow-a">
+    <div class="container-fluid container navbar-container">
+      <a class="navbar-brand p-0 bg-primary mr-2" href="#"><img class="logo" src="~/images/clipboard.svg" /></a>
+      <button class="navbar-toggler bg-primary mr-2" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link @(ViewData["Title"] as string == "Home" ? "text-primary" : "")" aria-current="page" asp-controller="home" asp-action="index">Home</a>
+          </li>
+        </ul>
+        <partial name="_LoginPartial" />
+      </div>
+    </div>
+  </nav>
 
-                </ul>
-                <partial name="_LoginPartial" />
-            </div>
+  @RenderBody()
+
+  <footer class="p-2 bg-light shadow-a">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+          <h4>This Page</h4>
+          <div>
+            <span class="footer-bullet mr-1">›</span> This page is an internal test.<br />
+            <span class="footer-bullet mr-1">›</span> However, the sourcecode is available on <a href="https://github.com/ultradr3mer/ClaraOriginal">Github</a>.
+          </div>
         </div>
-    </nav>
-
-    @RenderBody()
-
-    <footer class="p-2 bg-light shadow-a">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-md-6 mb-3">
-                    <h4>This Page</h4>
-                    <div>
-                        <span class="footer-bullet mr-1">›</span> This page is an internal test.<br />
-                        <span class="footer-bullet mr-1">›</span> However, the sourcecode is available on <a href="https://github.com/ultradr3mer/ClaraOriginal">Github</a>.
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 mb-3">
-                    <h4>Copyright</h4>
-                    <div class="vertical-alignment-container">
-                        <p>&copy; Clara Schulz-Thei&szlig;en 2022<br />all rights reserved</p>
-                    </div>
-                </div>
-            </div>
+        <div class="col-12 col-md-6 mb-3">
+          <h4>Copyright</h4>
+          <div class="vertical-alignment-container">
+            <p>&copy; Clara Schulz-Thei&szlig;en 2022<br />all rights reserved</p>
+          </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap-4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-    <script type="text/javascript">
-        $('.dropdown-toggle').dropdown()
-    </script>
+      </div>
+    </div>
+  </footer>
+  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+  <script src="~/lib/bootstrap-4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+  @await RenderSectionAsync("Scripts", required: false)
+  <script type="text/javascript">
+    $('.dropdown-toggle').dropdown()
+  </script>
 
 </body>
 </html>

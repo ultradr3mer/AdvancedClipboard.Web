@@ -85,7 +85,7 @@ namespace AdvancedClipboard.Web.ApiControllers
     {
       var userId = this.User.GetId();
 
-      var result = await this.clipboardRepository.GetWithContext(id, userId);
+      var result = await this.clipboardRepository.GetWithContextAsync(id, userId);
 
       return result;
     }
@@ -107,21 +107,7 @@ namespace AdvancedClipboard.Web.ApiControllers
     {
       var userId = this.User.GetId();
 
-      DateTime now = DateTime.Now;
-      ClipboardContentEntity entry = new ClipboardContentEntity()
-      {
-        ContentTypeId = ContentTypes.PlainText,
-        CreationDate = now,
-        LastUsedDate = now,
-        TextContent = data.Content,
-        UserId = userId,
-        LaneId = data.LaneGuid
-      };
-
-      await context.AddAsync(entry);
-      await context.SaveChangesAsync();
-
-      return ClipboardGetData.CreateWithPlainTextContent(entry.Id, entry.LaneId, entry.TextContent);
+      return await this.clipboardRepository.PostPlainTextAsync(userId, data);
     }
 
     [HttpPut]

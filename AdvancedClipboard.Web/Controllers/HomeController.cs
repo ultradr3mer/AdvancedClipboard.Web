@@ -23,7 +23,7 @@ namespace AdvancedClipboard.Web.Controllers
     {
       var userId = this.User.GetId();
 
-      var data = await this.repository.GetWithContext(id, userId);
+      var data = await this.repository.GetWithContextAsync(id, userId);
 
       var model = new HomeIndexModel()
       {
@@ -32,6 +32,19 @@ namespace AdvancedClipboard.Web.Controllers
       };
 
       return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Index(HomeIndexModel data, string? returnurl = null)
+    {
+      HttpContext.Items.TryGetValue("returnurl", out object? test);
+
+      var userId = this.User.GetId();
+
+      ApiControllers.Data.ClipboardPostPlainTextData apiData = new ApiControllers.Data.ClipboardPostPlainTextData() { Content = data.ContentToAdd };
+      await this.repository.PostPlainTextAsync(userId, apiData);
+
+      return LocalRedirect(data.ReturnUrl);
     }
 
     public IActionResult Privacy()
