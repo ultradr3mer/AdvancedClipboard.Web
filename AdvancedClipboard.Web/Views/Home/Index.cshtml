@@ -4,7 +4,6 @@
 
   var laneColors = Model.Lanes.ToDictionary(o => o.Id, o => o.Color);
   laneColors.Add(Guid.Empty, "transparent");
-  //Model.ReturnUrl = Context.Request.Path;
 }
 @model HomeIndexModel
 
@@ -29,24 +28,37 @@
       </div>
     }
     <div class="row">
-      <div class="col-12 pr-2">
+      <div class="col pr-2">
         @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { ReturnUrl = Context.Request.Path }))
         {
           <div class="input-group">
             @Html.TextBoxFor(m => m.ContentToAdd, new { @class="form-control bg-medium border-0 text-white", placeholder="Quick add note" })
-            @Html.Hidden(nameof(Model.ReturnUrl), Context.Request.Path, new {})
+            @Html.Hidden(nameof(Model.ReturnUrl), Context.Request.Path)
             <div class="input-group-append">
               <button class="btn btn-primary" type="submit"><i class="bi bi-plus-circle"></i></button>
             </div>
           </div>
         }
       </div>
+      <div class="col-auto pr-2">
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { ReturnUrl = Context.Request.Path, id = "PasteForm" }))
+        {
+          <div class="input-group">
+            @Html.Hidden(nameof(Model.ContentToAdd), string.Empty)
+            @Html.Hidden(nameof(Model.ReturnUrl), Context.Request.Path)
+            <button class="btn btn-primary" type="submit"><i class="bi bi-clipboard-plus"></i></button>
+          </div>
+        }
+        @section Scripts {
+        <script src="~/js/clipboard.js"></script>
+        }
+      </div>
     </div>
     <div class="row pt-3 pb-3">
       @foreach (var entry in Model!.Entries)
       {
-        <div class="col-12 col-md-6 col-lg-3 pb-3 pr-2">
-          <div class="card text-white bg-medium hadow-sm">
+        <div class="col-12 col-md-6 col-lg-3 pb-3 pr-2 ">
+          <div class="card text-white bg-medium hadow-sm clipboard-card">
             <div class="card-color-edge-container">
               <div class="card card-color-edge" style="background-color: @laneColors[entry.LaneId ?? Guid.Empty] ;"></div>
             </div>
@@ -54,11 +66,11 @@
               <div class="btn-group btn-group-sm float-right m-1" role="group">
                 <button type="button" class="btn btn-light"><i class="bi bi-pen"></i></button>
                 <button type="button" class="btn btn-light"><i class="bi bi-x-lg"></i></button>
+                @*<button type="button" class="btn btn-primary add-to-clipboard"><i class="bi bi-clipboard2-plus"></i></button>*@
               </div>
             </div>
             <div class="card-body clipboard-card-body">
               <p class="card-text clipboard-text">@entry.TextContent</p>
-
             </div>
           </div>
         </div>
