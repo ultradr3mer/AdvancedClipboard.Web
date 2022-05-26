@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'advancedclipboard2'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9EA2717C5498489FA840C96AB1474B60 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A0CB5B1BA7BB4434AC6EDDA6826A5F69 }}
           package: .
