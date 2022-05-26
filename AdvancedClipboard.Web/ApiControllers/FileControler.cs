@@ -14,7 +14,7 @@ namespace AdvancedClipboard.Web.ApiControllers
   /// <summary>
   /// The <see cref="FileController"/> provides functionality to upload and download files.
   /// </summary>
-  [Route("[controller]")]
+  [Route("api/[controller]")]
   [Authorize]
   [ApiController]
   public class FileController : ControllerBase

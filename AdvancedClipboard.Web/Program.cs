@@ -3,6 +3,7 @@ using AdvancedClipboard.Web.ApiControllers;
 using AdvancedClipboard.Web.Models;
 using AdvancedClipboard.Web.Models.Identity;
 using AdvancedClipboard.Web.Repositories;
+using AdvancedClipboard.Web.Util;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
@@ -21,30 +22,30 @@ builder.Services.AddEndpointsApiExplorer();
 var clientId = builder.Configuration.GetValue<string>("ClientId");
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Version = "v1",
-        Title = "Clipboard API"
-    });
+  options.SwaggerDoc("v1", new OpenApiInfo
+  {
+    Version = "v1",
+    Title = "Clipboard API"
+  });
 
-    options.AddSecurityDefinition("msid", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+  options.AddSecurityDefinition("msid", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+  {
+    Type = Microsoft.OpenApi.Models.SecuritySchemeType.OAuth2,
+    Flows = new Microsoft.OpenApi.Models.OpenApiOAuthFlows
     {
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.OAuth2,
-        Flows = new Microsoft.OpenApi.Models.OpenApiOAuthFlows
-        {
-            AuthorizationCode = new Microsoft.OpenApi.Models.OpenApiOAuthFlow
-            {
-                AuthorizationUrl = new System.Uri("https://localhost:7071/Identity/Account/Login?ReturnUrl=%2Fswagger"),
-                TokenUrl = new System.Uri("https://localhost:7071"),
-                Scopes = new Dictionary<string, string>
+      AuthorizationCode = new Microsoft.OpenApi.Models.OpenApiOAuthFlow
+      {
+        AuthorizationUrl = new System.Uri("https://localhost:7071/Identity/Account/Login?ReturnUrl=%2Fswagger"),
+        TokenUrl = new System.Uri("https://localhost:7071"),
+        Scopes = new Dictionary<string, string>
                 {
                     { $"api://{clientId}/access", "access" }
                 }
-            }
-        }
-    });
+      }
+    }
+  });
 
-    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+  options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
         {
             new Microsoft.OpenApi.Models.OpenApiSecurityScheme
@@ -54,6 +55,9 @@ builder.Services.AddSwaggerGen(options =>
             new [] { $"api://{clientId}/access" }
         }
     });
+
+  options.DocumentFilter<CustomSwaggerFilter>();
+
 });
 builder.Services.AddRazorPages();
 builder.Services.AddIdentity<ApplicationUser, Role>()
@@ -65,13 +69,13 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+  app.UseExceptionHandler("/Home/Error");
+  app.UseHsts();
 }
 else
-{ 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+{
+  app.UseSwagger();
+  app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
@@ -80,6 +84,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllerRoute(name: "api",
+    pattern: "api/{controller}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

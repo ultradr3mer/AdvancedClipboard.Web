@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace AdvancedClipboard.Web.ApiControllers
 {
   [Authorize]
-  [Route("[controller]")]
+  [Route("api/[controller]")]
   [ApiController]
   public class LaneController : Controller
   {

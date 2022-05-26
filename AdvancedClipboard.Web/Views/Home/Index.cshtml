@@ -4,30 +4,48 @@
 
   var laneColors = Model.Lanes.ToDictionary(o => o.Id, o => o.Color);
   laneColors.Add(Guid.Empty, "transparent");
+
+  string laneStyle = $"background-color: #303030;";
+  string title = "Lanes";
+  if (Model.CurrentLaneId != null)
+  {
+    var lane = Model.Lanes.Single(o => o.Id == Model.CurrentLaneId);
+    laneStyle = $"background-color: {lane.Color}55; border-bottom: .3em solid {lane.Color};";
+    title = lane.Name;
+  }
+
+
 }
 @model HomeIndexModel
 
-<main class="bg-dark pb-4">
+<main class="bg-dark pb-4 pt-3">
+
   <div class="container">
     @if (Model?.Lanes != null)
     {
-      <div class="row pt-3 pb-3">
-
-        <div class="col-12 pb-3">
-
-          <h3>
-            Lanes
-          </h3>
-          <div>
-            @foreach (var lane in Model.Lanes)
-            {
-              <a href="" class="btn btn-sm m-1" style="background-color: @lane.Color ; color: @lane.TextColor ;">@lane.Name</a>
-            }
+      <div class="row">
+        <div class="col-12 pr-2">
+          <div class="card text-white clipboard-card" style="@laneStyle">
+            <div class="card-header lane-card-header">
+              <h3 class="mb-0">
+                @title
+              </h3>
+            </div>
+            <div class="card-body lane-card-body">
+              @if (Model.CurrentLaneId != null)
+              {
+              <a class="btn btn-sm m-1 bg-medium rounded-right show-all-button" asp-controller="home" asp-action="index"><i class="bi bi-arrow-left-circle-fill mr-2"></i>Show all</a>
+              }
+              @foreach (var lane in Model.Lanes)
+              {
+                <a class="btn btn-sm m-1" style="background-color: @lane.Color ; color: @lane.TextColor ;" asp-controller="home" asp-action="lane" asp-route-laneid="@lane.Id">@lane.Name</a>
+              }
+            </div>
           </div>
         </div>
       </div>
     }
-    <div class="row">
+    <div class="row pt-3 ">
       <div class="col pr-2">
         @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { ReturnUrl = Context.Request.Path }))
         {
@@ -58,15 +76,11 @@
       @foreach (var entry in Model!.Entries)
       {
         <div class="col-12 col-md-6 col-lg-3 pb-3 pr-2 ">
-          <div class="card text-white bg-medium hadow-sm clipboard-card">
-            <div class="card-color-edge-container">
-              <div class="card card-color-edge" style="background-color: @laneColors[entry.LaneId ?? Guid.Empty] ;"></div>
-            </div>
+          <div class="card text-white bg-medium hadow-sm clipboard-card" style="border-left: .3em solid @laneColors[entry.LaneId ?? Guid.Empty] ;">
             <div class="card-header clipboard-card-header">
               <div class="btn-group btn-group-sm float-right m-1" role="group">
                 <button type="button" class="btn btn-light"><i class="bi bi-pen"></i></button>
                 <button type="button" class="btn btn-light"><i class="bi bi-x-lg"></i></button>
-                @*<button type="button" class="btn btn-primary add-to-clipboard"><i class="bi bi-clipboard2-plus"></i></button>*@
               </div>
             </div>
             <div class="card-body clipboard-card-body">

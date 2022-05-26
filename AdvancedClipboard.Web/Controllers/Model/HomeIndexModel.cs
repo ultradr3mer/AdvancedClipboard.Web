@@ -10,5 +10,6 @@ namespace AdvancedClipboard.Web.Controllers.Model
     public string ContentToAdd { get; set; }
 
     public string ReturnUrl { get; set; }
+    public Guid? CurrentLaneId { get; set; }
   }
 }

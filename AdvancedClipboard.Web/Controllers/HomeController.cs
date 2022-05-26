@@ -19,11 +19,28 @@ namespace AdvancedClipboard.Web.Controllers
       this.repository = clipboardController;
     }
 
-    public async Task<IActionResult> Index(Guid? id = null)
+    [HttpGet("Lane")]
+    public async Task<IActionResult> Lane(Guid laneid)
     {
       var userId = this.User.GetId();
 
-      var data = await this.repository.GetWithContextAsync(id, userId);
+      var data = await this.repository.GetLaneWithContextAsync(laneid, userId);
+
+      var model = new HomeIndexModel()
+      {
+        Lanes = data.Lanes.Select(o => new LaneDisplayData(o)).ToList(),
+        Entries = data.Entries,
+        CurrentLaneId = laneid
+      };
+
+      return View(nameof(Index), model);
+    }
+
+    public async Task<IActionResult> Index()
+    {
+      var userId = this.User.GetId();
+
+      var data = await this.repository.GetWithContextAsync(null, userId);
 
       var model = new HomeIndexModel()
       {

@@ -14,7 +14,7 @@ using AdvancedClipboard.Web.ApiControllers.Data;
 namespace AdvancedClipboard.Web.ApiControllers
 {
   [Authorize]
-  [Route("[controller]")]
+  [Route("api/[controller]")]
   [ApiController]
   public class ClipboardController : ControllerBase
   {
@@ -62,20 +62,7 @@ namespace AdvancedClipboard.Web.ApiControllers
       }
 
       var userId = this.User.GetId();
-
-      List<ClipboardGetData> entries = await (from cc in context.ClipboardContent
-                                              where cc.UserId == userId
-                                              && cc.IsArchived == false
-                                              && cc.LaneId == lane
-                                              select ClipboardGetData.CreateFromEntity(cc, cc.FileToken)).ToListAsync();
-
-      List<LaneGetData> lanes = await LaneController.GetLanesForUser(context, userId);
-
-      ClipboardContainerGetData result = new ClipboardContainerGetData()
-      {
-        Entries = entries,
-        Lanes = lanes
-      };
+      ClipboardContainerGetData result = await this.clipboardRepository.GetLaneWithContextAsync(lane, userId);
 
       return result;
     }
@@ -131,7 +118,7 @@ namespace AdvancedClipboard.Web.ApiControllers
       return this.Ok();
     }
 
-    private async Task<ClipboardGetData> PostFileInternal(IFormFile file, string fileExtension, string fileName, Guid? laneId)
+    private async Task<ClipboardGetData> PostFileInternal(IFormFile file, string? fileExtension, string? fileName, Guid? laneId)
     {
       var userId = this.User.GetId();
       var userName = this.User.GetNameIdentifierId() ?? this.User.GetDisplayName() ?? throw new Exception("User has no Name");

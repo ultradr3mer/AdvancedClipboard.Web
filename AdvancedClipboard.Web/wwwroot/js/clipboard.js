@@ -2,6 +2,7 @@
 
   var flash = function (elements) {
     var mult = 2.0;
+    var color = "255, 255, 20" // has to be in this format since we use rgba
     var interval = setInterval(function () {
       mult *= 0.97;
       mult -= 0.02;

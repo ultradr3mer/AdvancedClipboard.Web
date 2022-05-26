@@ -47,3 +47,17 @@ body {
 .clipboard-card-header {
   padding: 0rem;
 }
+
+.lane-card-body {
+  padding: 0.75rem;
+}
+
+.lane-card-header {
+  padding: 0.75rem;
+}
+
+.show-all-button {
+  margin-left: -0.75rem !important;
+  border-top-left-radius: 0rem !important;
+  border-bottom-left-radius: 0rem;
+}
