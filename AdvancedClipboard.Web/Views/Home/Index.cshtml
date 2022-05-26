@@ -46,7 +46,7 @@
           <div class="input-group">
             @Html.Hidden(nameof(Model.ContentToAdd), string.Empty)
             @Html.Hidden(nameof(Model.ReturnUrl), Context.Request.Path)
-            <button class="btn btn-primary" type="submit"><i class="bi bi-clipboard-plus"></i></button>
+            <button class="btn btn-primary paste-button" type="button"><i class="bi bi-clipboard-plus"></i></button>
           </div>
         }
         @section Scripts {
