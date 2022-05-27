@@ -1,4 +1,5 @@
 ﻿using AdvancedClipboard.Web.ApiControllers;
+using AdvancedClipboard.Web.ApiControllers.Data;
 using AdvancedClipboard.Web.Controllers.Model;
 using AdvancedClipboard.Web.Extensions;
 using AdvancedClipboard.Web.Models;
@@ -58,7 +59,7 @@ namespace AdvancedClipboard.Web.Controllers
 
       var userId = this.User.GetId();
 
-      ApiControllers.Data.ClipboardPostPlainTextData apiData = new ApiControllers.Data.ClipboardPostPlainTextData() { Content = data.ContentToAdd };
+      var apiData = new ClipboardPostPlainTextData() { Content = data.ContentToAdd, LaneGuid = data.CurrentLaneId };
       await this.repository.PostPlainTextAsync(userId, apiData);
 
       return LocalRedirect(data.ReturnUrl);

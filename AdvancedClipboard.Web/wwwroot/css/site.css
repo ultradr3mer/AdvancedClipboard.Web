@@ -6,8 +6,12 @@ body {
 
 .logo {
   margin: 0;
-  width: 60px;
   height: 60px;
+}
+
+.logo-text {
+  font-family: Signika Negative;
+  font-size: 1.75rem;
 }
 
 .navbar {
@@ -34,7 +38,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 6;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   cursor: copy;
 }
