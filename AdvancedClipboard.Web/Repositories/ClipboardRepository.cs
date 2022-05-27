@@ -75,5 +75,21 @@ namespace AdvancedClipboard.Web.Repositories
       };
       return result;
     }
+
+    internal async Task Put(ClipboardPutData data, Guid userId)
+    {
+      ClipboardContentEntity cc = await context.ClipboardContent.FindAsync(data.Id) ?? throw new Exception("Content to Update not found.");
+
+      if (cc.UserId != userId)
+      {
+        throw new Exception("Content to Update not found.");
+      }
+
+      cc.DisplayFileName = data.FileName;
+      cc.TextContent = data.TextContent;
+      cc.LaneId = data.LaneId;
+
+      await context.SaveChangesAsync();
+    }
   }
 }

@@ -100,20 +100,9 @@ namespace AdvancedClipboard.Web.ApiControllers
     [HttpPut]
     public async Task<IActionResult> Put(ClipboardPutData data)
     {
-      ClipboardContentEntity cc = await context.ClipboardContent.FindAsync(data.Id) ?? throw new Exception("Content to Update not found.");
-
       var userId = this.User.GetId();
 
-      if (cc.UserId != userId)
-      {
-        throw new Exception("Content to Update not found.");
-      }
-
-      cc.DisplayFileName = data.FileName;
-      cc.TextContent = data.TextContent;
-      cc.LaneId = data.LaneId;
-
-      await context.SaveChangesAsync();
+      await this.clipboardRepository.Put(data, userId);
 
       return this.Ok();
     }

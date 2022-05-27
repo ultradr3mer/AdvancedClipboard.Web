@@ -84,11 +84,11 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(name: "api",
-    pattern: "api/{controller}/{action=Index}/{id?}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(name: "api",
+    pattern: "api/{controller}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();

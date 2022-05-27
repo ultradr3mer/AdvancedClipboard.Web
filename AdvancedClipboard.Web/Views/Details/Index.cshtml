@@ -1,0 +1,48 @@
+﻿@using AdvancedClipboard.Web.Controllers.Model
+@using AdvancedClipboard.Web.Util
+@{
+  ViewData["Title"] = "Details";
+
+  string fullPath = Context.Request.Path + Context.Request.QueryString;
+}
+@model DetailsModel
+
+<main class="bg-dark pb-4 pt-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 pr-2">
+        <div class="card text-white clipboard-card text-white bg-medium">
+          <div class="card-header">
+            <h3 class="mb-0">
+              Details
+            </h3>
+          </div>
+          <div class="card-body">
+            @using (Html.BeginForm("Index", "Details", FormMethod.Post))
+            {
+              <div class="form-group">
+                <label for="content">Content</label>
+                @Html.TextAreaFor(m => m.TextContent, new { @class="form-control bg-dark text-white border-light", id="content", rows="20" })
+              </div>
+              <div class="row align-items-end">
+                <div class="col-12 col-md-6">
+                  <div class="form-group align-self-start" style="max-width: 300px;">
+                    <label for="select">Lane</label>
+                    <select class="form-control bg-dark text-white border-light" asp-items="@Model.Lanes" asp-for="LaneId" id="select"> </select>
+                  </div>
+                </div>
+                @Html.HiddenFor(m => m.ReturnUrl)
+                @Html.HiddenFor(m => m.FileName)
+                @Html.HiddenFor(m => m.Id)
+                <div class="col-12 col-md-6">
+                  <button class="btn btn-primary float-right mb-1" type="submit">Save<i class="bi bi-save ml-2"></i></button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</main>

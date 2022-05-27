@@ -55,7 +55,7 @@
             @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
             @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
             <div class="input-group-append">
-              <button class="btn btn-primary" type="submit" ><i class="bi bi-plus-circle"></i></button>
+              <button class="btn btn-primary" type="submit"><i class="bi bi-plus-circle"></i></button>
             </div>
           </div>
         }
@@ -67,7 +67,7 @@
             @Html.Hidden(nameof(Model.ContentToAdd), string.Empty)
             @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
             @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
-            <button class="btn btn-primary paste-button" type="button" ><i class="bi bi-clipboard-plus"></i></button>
+            <button class="btn btn-primary paste-button" type="button"><i class="bi bi-clipboard-plus"></i></button>
           </div>
         }
       </div>
@@ -80,7 +80,14 @@
             <div class="card-header clipboard-card-header">
               <div class="btn-group btn-group-sm float-right m-1" role="group">
                 <button type="button" class="btn btn-light expand-clipboard"><i class="bi bi-arrows-angle-expand"></i></button>
-                <button type="button" class="btn btn-light"><i class="bi bi-pen"></i></button>
+                <a class="btn btn-light"
+                 role="button" asp-area=""
+                 asp-controller="Details"
+                 asp-action="index"
+                 asp-route-id="@entry.Id"
+                 asp-route-returnurl="@fullPath">
+                  <i class="bi bi-pen"></i>
+                </a>
                 <button type="button" class="btn btn-light"><i class="bi bi-x-lg"></i></button>
               </div>
             </div>

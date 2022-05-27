@@ -4,12 +4,14 @@ namespace AdvancedClipboard.Web.Controllers.Model
 {
   public class HomeIndexModel
   {
-    public List<LaneDisplayData> Lanes { get; internal set; }
-    public List<ClipboardGetData> Entries { get; internal set; }
+    public List<LaneDisplayData> Lanes { get; set; } = new List<LaneDisplayData>();
 
-    public string ContentToAdd { get; set; }
+    public List<ClipboardGetData> Entries { get; set; } = new List<ClipboardGetData>();
 
-    public string ReturnUrl { get; set; }
+    public string? ContentToAdd { get; set; }
+
+    public string? ReturnUrl { get; set; }
+
     public Guid? CurrentLaneId { get; set; }
   }
 }
