@@ -1,4 +1,5 @@
-﻿@using AdvancedClipboard.Web.Controllers.Model
+﻿@using AdvancedClipboard.Server.Constants
+@using AdvancedClipboard.Web.Controllers.Model
 @using AdvancedClipboard.Web.Util
 @{
   ViewData["Title"] = "Home Page";
@@ -92,7 +93,18 @@
               </div>
             </div>
             <div class="card-body clipboard-card-body">
-              <p class="card-text clipboard-text">@UrlParser.ConvertToHtmlWithLinks(entry.TextContent)</p>
+              @if (entry.ContentTypeId == ContentTypes.PlainText)
+              {
+                <p class="card-text clipboard-text">@UrlParser.ConvertToHtmlWithLinks(entry.TextContent)</p>
+              }
+              else if (entry.ContentTypeId == ContentTypes.Image)
+              {
+                <img class="clipboard-image" src="~/api/file/@entry.FileContentUrl" />
+              }
+              else if (entry.ContentTypeId == ContentTypes.File)
+              {
+                <span>file</span>
+              }
             </div>
           </div>
         </div>

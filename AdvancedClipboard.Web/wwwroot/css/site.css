@@ -65,3 +65,8 @@ body {
   border-top-left-radius: 0rem !important;
   border-bottom-left-radius: 0rem;
 }
+
+.clipboard-image {
+  width: 100%;
+  margin: 0;
+}

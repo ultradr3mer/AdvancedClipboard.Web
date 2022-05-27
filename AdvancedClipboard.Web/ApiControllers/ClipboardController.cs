@@ -110,7 +110,6 @@ namespace AdvancedClipboard.Web.ApiControllers
     private async Task<ClipboardGetData> PostFileInternal(IFormFile file, string? fileExtension, string? fileName, Guid? laneId)
     {
       var userId = this.User.GetId();
-      var userName = this.User.GetNameIdentifierId() ?? this.User.GetDisplayName() ?? throw new Exception("User has no Name");
 
       DateTime now = DateTime.Now;
       string extension = (fileExtension ?? Path.GetExtension(fileName) ?? Path.GetExtension(file.FileName));
@@ -118,7 +117,6 @@ namespace AdvancedClipboard.Web.ApiControllers
       FileAccessTokenEntity token = await this.fileRepository.UploadInternal(filename,
                                                                              file.OpenReadStream(),
                                                                              userId,
-                                                                             userName,
                                                                              this.context,
                                                                              false);
 

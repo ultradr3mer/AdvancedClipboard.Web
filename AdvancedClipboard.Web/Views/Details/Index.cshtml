@@ -22,13 +22,13 @@
             {
               <div class="form-group">
                 <label for="content">Content</label>
-                @Html.TextAreaFor(m => m.TextContent, new { @class="form-control bg-dark text-white border-light", id="content", rows="20" })
+                @Html.TextAreaFor(m => m.TextContent, new { @class="form-control bg-dark text-white border-0", id="content", rows="20" })
               </div>
               <div class="row align-items-end">
                 <div class="col-12 col-md-6">
                   <div class="form-group align-self-start" style="max-width: 300px;">
                     <label for="select">Lane</label>
-                    <select class="form-control bg-dark text-white border-light" asp-items="@Model.Lanes" asp-for="LaneId" id="select"> </select>
+                    <select class="form-control bg-dark text-white border-0" asp-items="@Model.Lanes" asp-for="LaneId" id="select"> </select>
                   </div>
                 </div>
                 @Html.HiddenFor(m => m.ReturnUrl)

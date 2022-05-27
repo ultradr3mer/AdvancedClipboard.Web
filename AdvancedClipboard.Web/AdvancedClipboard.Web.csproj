@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-AdvancedClipboard.Web-EFFE4656-2A87-4387-A8E2-50D0AE81DD80</UserSecretsId>
+    <NeutralLanguage>de-DE</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,18 @@
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Properties\Resource.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\launchSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +56,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.3.1" />
+    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +69,25 @@
     <Folder Include="wwwroot\lib\jquery-validation\dist\" />
     <Folder Include="wwwroot\lib\jquery\" />
     <Folder Include="wwwroot\lib\jquery\dist\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Properties\Resource.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
