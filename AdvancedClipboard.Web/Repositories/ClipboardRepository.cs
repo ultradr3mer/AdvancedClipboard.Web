@@ -91,5 +91,19 @@ namespace AdvancedClipboard.Web.Repositories
 
       await context.SaveChangesAsync();
     }
+
+    internal async Task Delete(Guid id, Guid userId)
+    {
+      var cc = await context.ClipboardContent.FindAsync(id) ?? throw new Exception("Item Not Found.");
+      cc.IsArchived = true;
+
+      if (cc.UserId != userId)
+      {
+        throw new Exception("Item Not Found.");
+      }
+
+      await context.SaveChangesAsync();
+    }
+
   }
 }

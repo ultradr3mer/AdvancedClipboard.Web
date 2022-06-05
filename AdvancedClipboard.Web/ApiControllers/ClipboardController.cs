@@ -40,15 +40,9 @@ namespace AdvancedClipboard.Web.ApiControllers
     [HttpDelete]
     public async Task<ActionResult> DeleteAsync(Guid Id)
     {
-      var cc = await context.ClipboardContent.FindAsync(Id) ?? throw new ArgumentException("Item Not Found");
-      cc.IsArchived = true;
+      var userId = this.User.GetId();
 
-      if (cc.UserId != this.User.GetId())
-      {
-        return this.BadRequest();
-      }
-
-      await context.SaveChangesAsync();
+      await this.clipboardRepository.Delete(Id, userId);
 
       return this.Ok();
     }
@@ -66,6 +60,7 @@ namespace AdvancedClipboard.Web.ApiControllers
 
       return result;
     }
+
 
     [HttpGet(nameof(GetWithContext))]
     public async Task<ClipboardContainerGetData> GetWithContext(Guid? id = null)

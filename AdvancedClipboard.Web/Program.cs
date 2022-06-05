@@ -56,7 +56,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-  options.DocumentFilter<CustomSwaggerFilter>();
+  //options.DocumentFilter<CustomSwaggerFilter>();
 
 });
 builder.Services.AddRazorPages();

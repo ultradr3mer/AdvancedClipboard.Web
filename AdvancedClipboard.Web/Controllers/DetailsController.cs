@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace AdvancedClipboard.Web.Controllers
 {
   [Authorize]
+  [Route("[controller]")]
   public class DetailsController : Controller
   {
     private readonly ClipboardRepository repository;
@@ -40,6 +41,16 @@ namespace AdvancedClipboard.Web.Controllers
 
       var data = TypeAdapter.Adapt<ClipboardPutData>(model);
       await this.repository.Put(data, userId);
+
+      return LocalRedirect(model.ReturnUrl);
+    }
+
+    [HttpPost(nameof(Delete))]
+    public async Task<IActionResult> Delete(DetailsModel model)
+    {
+      var userId = this.User.GetId();
+
+      await this.repository.Delete(model.Id, userId);
 
       return LocalRedirect(model.ReturnUrl);
     }

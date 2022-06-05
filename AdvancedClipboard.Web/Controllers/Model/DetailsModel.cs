@@ -11,7 +11,7 @@ namespace AdvancedClipboard.Web.Controllers.Model
 
     public string? FileContentUrl { get; set; }
 
-    public Guid? Id { get; set; }
+    public Guid Id { get; set; }
 
     public string? TextContent { get; set; }
 
@@ -19,6 +19,6 @@ namespace AdvancedClipboard.Web.Controllers.Model
 
     public Guid? LaneId { get; set; }
 
-    public string? ReturnUrl { get; set; }
+    public string ReturnUrl { get; set; } = string.Empty;
   }
 }

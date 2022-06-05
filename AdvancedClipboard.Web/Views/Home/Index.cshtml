@@ -2,7 +2,7 @@
 @using AdvancedClipboard.Web.Controllers.Model
 @using AdvancedClipboard.Web.Util
 @{
-  ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Advanced Clipboard";
 
   var laneColors = Model.Lanes.ToDictionary(o => o.Id, o => o.Color);
   laneColors.Add(Guid.Empty, "transparent");
@@ -31,46 +31,54 @@
             <div class="card-header lane-card-header">
               <h3 class="mb-0">
                 @title
+                @if (Model.CurrentLaneId != null)
+                {
+                  <a class="btn" asp-controller="home" asp-action="index"><i class="bi bi-pen"></i></a>
+                }
               </h3>
             </div>
             <div class="card-body lane-card-body">
               @if (Model.CurrentLaneId != null)
               {
-                <a class="btn btn-sm m-1 bg-medium rounded-right show-all-button" asp-controller="home" asp-action="index"><i class="bi bi-arrow-left-circle-fill mr-2"></i>Show all</a>
+                <a class="btn m-1 bg-medium rounded-right show-all-button" asp-controller="home" asp-action="index"><i class="bi bi-arrow-left-circle-fill mr-2"></i>Show all</a>
               }
               @foreach (var lane in Model.Lanes)
               {
-                <a class="btn btn-sm m-1" style="background-color: @lane.Color ; color: @lane.TextColor ;" asp-controller="home" asp-action="lane" asp-route-laneid="@lane.Id">@lane.Name</a>
+                <a class="btn m-1 lane-button" style="background-color: @lane.Color ; color: @lane.TextColor ;" asp-controller="home" asp-action="lane" asp-route-laneid="@lane.Id">@lane.Name</a>
               }
             </div>
           </div>
         </div>
       </div>
     }
-    <div class="row pt-3 ">
-      <div class="col pr-2">
-        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
-        {
-          <div class="input-group">
-            @Html.TextBoxFor(m => m.ContentToAdd, new { @class="form-control bg-medium border-0 text-white", placeholder="Quick add note" })
-            @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
-            @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
-            <div class="input-group-append">
-              <button class="btn btn-primary" type="submit"><i class="bi bi-plus-circle"></i></button>
+    <div class="row">
+      <div class="col-12 pr-2">
+        <div class="form-row pt-3">
+          <div class="col">
+          @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+          {
+            <div class="input-group">
+              @Html.TextBoxFor(m => m.ContentToAdd, new { @class="form-control bg-medium border-0 text-white", placeholder="Quick add note" })
+              @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
+              @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="submit"><i class="bi bi-plus-circle"></i></button>
+              </div>
             </div>
+          }
           </div>
-        }
-      </div>
-      <div class="col-auto pr-2">
-        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "PasteForm" }))
-        {
-          <div class="input-group">
-            @Html.Hidden(nameof(Model.ContentToAdd), string.Empty)
-            @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
-            @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
-            <button class="btn btn-primary paste-button" type="button"><i class="bi bi-clipboard-plus"></i></button>
+          <div class="col-auto">
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "PasteForm" }))
+            {
+              <div class="input-group">
+                @Html.Hidden(nameof(Model.ContentToAdd), string.Empty)
+                @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
+                @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
+                <button class="btn btn-primary paste-button" type="button"><i class="bi bi-clipboard-plus"></i></button>
+              </div>
+            }
           </div>
-        }
+        </div>
       </div>
     </div>
     <div class="row pt-3 pb-3">
@@ -79,18 +87,27 @@
         <div class="col-12 col-md-6 col-lg-3 pb-3 pr-2 ">
           <div class="card text-white bg-medium hadow-sm clipboard-card" style="border-left: .3em solid @laneColors[entry.LaneId ?? Guid.Empty] ;">
             <div class="card-header clipboard-card-header">
-              <div class="btn-group btn-group-sm float-right m-1" role="group">
-                <button type="button" class="btn btn-light expand-clipboard"><i class="bi bi-arrows-angle-expand"></i></button>
-                <a class="btn btn-light"
-                 role="button" asp-area=""
-                 asp-controller="Details"
-                 asp-action="index"
-                 asp-route-id="@entry.Id"
-                 asp-route-returnurl="@fullPath">
-                  <i class="bi bi-pen"></i>
-                </a>
-                <button type="button" class="btn btn-light"><i class="bi bi-x-lg"></i></button>
-              </div>
+              <form method="post">
+                <input name="id" type="hidden" value="@entry.Id">
+                <input name="returnurl" type="hidden" value="@fullPath">
+                <div class="btn-group btn-group-sm float-right m-1" role="group">
+                  <button type="button" class="btn btn-light expand-clipboard"><i class="bi bi-arrows-angle-expand"></i></button>
+                  <a class="btn btn-light"
+                   role="button" asp-area=""
+                   asp-controller="Details"
+                   asp-action="index"
+                   asp-route-id="@entry.Id"
+                   asp-route-returnurl="@fullPath">
+                    <i class="bi bi-pen"></i>
+                  </a>
+                  <button class="btn btn-light"
+                        role="button" asp-area=""
+                        asp-controller="Details"
+                        asp-action="delete">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+                </div>
+              </form>
             </div>
             <div class="card-body clipboard-card-body">
               @if (entry.ContentTypeId == ContentTypes.PlainText)
