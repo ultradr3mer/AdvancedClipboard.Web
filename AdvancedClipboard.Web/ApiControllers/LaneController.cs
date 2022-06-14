@@ -2,6 +2,7 @@
 using AdvancedClipboard.Web.Extensions;
 using AdvancedClipboard.Web.Models;
 using AdvancedClipboard.Web.Models.Identity;
+using AdvancedClipboard.Web.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,15 +19,17 @@ namespace AdvancedClipboard.Web.ApiControllers
 
     private readonly SignInManager<ApplicationUser> signInManager;
     private readonly ApplicationDbContext context;
+    private readonly LaneRepository repository;
 
     #endregion Fields
 
     #region Constructors
 
-    public LaneController(SignInManager<ApplicationUser> _signInManager, ApplicationDbContext context)
+    public LaneController(SignInManager<ApplicationUser> _signInManager, ApplicationDbContext context, LaneRepository repository)
     {
       this.signInManager = _signInManager;
       this.context = context;
+      this.repository = repository;
     }
 
     internal static Task<List<LaneGetData>> GetLanesForUser(object context, Guid userId)
@@ -42,7 +45,7 @@ namespace AdvancedClipboard.Web.ApiControllers
     {
       return await (from lane in context.Lane
                     where lane.UserId == userId
-                    select CreateGetDataFromEntity(lane)).ToListAsync();
+                    select LaneRepository.CreateGetDataFromEntity(lane)).ToListAsync();
     }
 
     [HttpPut("AssignContent")]
@@ -96,17 +99,9 @@ namespace AdvancedClipboard.Web.ApiControllers
     {
       var userId = this.User.GetId();
 
-      LaneEntity entity = new LaneEntity()
-      {
-        Name = data.Name,
-        Color = data.Color,
-        UserId = userId
-      };
+      var result = await this.repository.PostAsync(data, userId);
 
-      await context.AddAsync(entity);
-      await context.SaveChangesAsync();
-
-      return CreateGetDataFromEntity(entity);
+      return result;
     }
 
     [HttpPut]
@@ -128,15 +123,6 @@ namespace AdvancedClipboard.Web.ApiControllers
       return this.Ok();
     }
 
-    private static LaneGetData CreateGetDataFromEntity(LaneEntity lane)
-    {
-      return new LaneGetData()
-      {
-        Id = lane.Id,
-        Name = lane.Name,
-        Color = lane.Color
-      };
-    }
 
     #endregion Methods
   }

@@ -17,6 +17,7 @@ var storageConnectionString = builder.Configuration.GetConnectionString("AzureSt
 builder.Services.AddAzureClients(builder => builder.AddBlobServiceClient(storageConnectionString));
 builder.Services.AddScoped<FileRepository>();
 builder.Services.AddScoped<ClipboardRepository>();
+builder.Services.AddScoped<LaneRepository>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 var clientId = builder.Configuration.GetValue<string>("ClientId");

@@ -26,21 +26,37 @@
     @if (Model?.Lanes != null)
     {
       <div class="row">
-        <div class="col-12 pr-2">
+        <div class="col-12 pe-2">
           <div class="card text-white clipboard-card" style="@laneStyle">
             <div class="card-header lane-card-header">
-              <h3 class="mb-0">
-                @title
-                @if (Model.CurrentLaneId != null)
-                {
-                  <a class="btn" asp-controller="home" asp-action="index"><i class="bi bi-pen"></i></a>
-                }
-              </h3>
+              <div class="container ps-3 pe-3">
+                <div class="row">
+                  <div class="col-auto ps-0 pb-2">
+                    <h3 class="me-0">
+                      @title
+                      @if (Model.CurrentLaneId != null)
+                      {
+                        <a class="btn" asp-controller="details" asp-action="lane" asp-route-id="Model.CurrentLaneId"><i class="bi bi-pen"></i></a>
+                      }
+                    </h3>
+                  </div>
+                  <div class="col-12 col-md pe-0 pb-2">
+                    <form class="from-inline float-end" method="post">
+                      <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="@fullPath">
+                      <div class="input-group">
+                        <input class="form-control bg-dark border-0 text-white" id="Name" name="Name" width="200" placeholder="Add lane" type="text" value="">
+                        <input type="color" class="pb-1 pt-1 btn btn-dark form-control-color lane-color-picker" name="color" value="#ff0000">
+                        <button class="btn btn-light" asp-controller="lane" asp-action="" type="submit"><i class="bi bi-plus-circle"></i></button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="card-body lane-card-body">
               @if (Model.CurrentLaneId != null)
               {
-                <a class="btn m-1 bg-medium rounded-right show-all-button" asp-controller="home" asp-action="index"><i class="bi bi-arrow-left-circle-fill mr-2"></i>Show all</a>
+                <a class="btn m-1 bg-medium rounded-right show-all-button" asp-controller="home" asp-action="index"><i class="bi bi-arrow-left me-2"></i>Show all</a>
               }
               @foreach (var lane in Model.Lanes)
               {
@@ -52,30 +68,26 @@
       </div>
     }
     <div class="row">
-      <div class="col-12 pr-2">
-        <div class="form-row pt-3">
-          <div class="col">
-          @using (Html.BeginForm("Index", "Home", FormMethod.Post))
-          {
-            <div class="input-group">
-              @Html.TextBoxFor(m => m.ContentToAdd, new { @class="form-control bg-medium border-0 text-white", placeholder="Quick add note" })
-              @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
-              @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
-              <div class="input-group-append">
-                <button class="btn btn-primary" type="submit"><i class="bi bi-plus-circle"></i></button>
+      <div class="col-12 pe-2">
+        <div class="row pt-3">
+          <div class="col col pe-0">
+            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+            {
+              <div class="input-group">
+                @Html.TextBoxFor(m => m.ContentToAdd, new { @class="form-control bg-medium border-0 text-white", placeholder="Quick add note" })
+                @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
+                @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
+                <button class="btn btn-primary text-white" type="submit"><i class="bi bi-plus-circle"></i></button>
               </div>
-            </div>
-          }
+            }
           </div>
           <div class="col-auto">
             @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "PasteForm" }))
             {
-              <div class="input-group">
-                @Html.Hidden(nameof(Model.ContentToAdd), string.Empty)
-                @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
-                @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
-                <button class="btn btn-primary paste-button" type="button"><i class="bi bi-clipboard-plus"></i></button>
-              </div>
+              @Html.Hidden(nameof(Model.ContentToAdd), string.Empty)
+              @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
+              @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
+              <button class="btn btn-primary paste-button text-white" type="button"><i class="bi bi-clipboard-plus"></i></button>
             }
           </div>
         </div>
@@ -84,13 +96,13 @@
     <div class="row pt-3 pb-3">
       @foreach (var entry in Model!.Entries)
       {
-        <div class="col-12 col-md-6 col-lg-3 pb-3 pr-2 ">
+        <div class="col-12 col-md-6 col-lg-3 pb-3 pe-2 ">
           <div class="card text-white bg-medium hadow-sm clipboard-card" style="border-left: .3em solid @laneColors[entry.LaneId ?? Guid.Empty] ;">
             <div class="card-header clipboard-card-header">
               <form method="post">
                 <input name="id" type="hidden" value="@entry.Id">
                 <input name="returnurl" type="hidden" value="@fullPath">
-                <div class="btn-group btn-group-sm float-right m-1" role="group">
+                <div class="btn-group btn-group-sm float-end m-1" role="group">
                   <button type="button" class="btn btn-light expand-clipboard"><i class="bi bi-arrows-angle-expand"></i></button>
                   <a class="btn btn-light"
                    role="button" asp-area=""
