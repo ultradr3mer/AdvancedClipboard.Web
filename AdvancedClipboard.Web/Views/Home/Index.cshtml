@@ -12,7 +12,7 @@
   if (Model.CurrentLaneId != null)
   {
     var lane = Model.Lanes.Single(o => o.Id == Model.CurrentLaneId);
-    laneStyle = $"background-color: {lane.Color}55; border-bottom: .3em solid {lane.Color};";
+    laneStyle = $"background-color: {lane.Color}55; border-bottom: .45em solid {lane.Color};";
     title = lane.Name;
   }
 
@@ -31,7 +31,7 @@
             <div class="card-header lane-card-header">
               <div class="container ps-3 pe-3">
                 <div class="row">
-                  <div class="col-auto ps-0 pb-2">
+                  <div class="col-auto ps-0 pb-1">
                     <h3 class="me-0">
                       @title
                       @if (Model.CurrentLaneId != null)
@@ -40,7 +40,7 @@
                       }
                     </h3>
                   </div>
-                  <div class="col-12 col-md pe-0 pb-2">
+                  <div class="col-12 col-md pe-0 pb-1">
                     <form class="from-inline float-end" method="post">
                       <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="@fullPath">
                       <div class="input-group">

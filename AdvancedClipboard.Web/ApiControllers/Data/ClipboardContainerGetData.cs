@@ -6,8 +6,8 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
   {
     #region Properties
 
-    public List<LaneGetData> Lanes { get; set; }
-    public List<ClipboardGetData> Entries { get; set; }
+    public List<LaneGetData> Lanes { get; set; } = new List<LaneGetData>();
+    public List<ClipboardGetData> Entries { get; set; } = new List<ClipboardGetData>();
 
     #endregion Properties
   }

@@ -18,10 +18,10 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
     #region Properties
 
     public Guid ContentTypeId { get; private set; }
-    public string FileContentUrl { get; private set; }
+    public string FileContentUrl { get; private set; } = string.Empty;
     public Guid Id { get; }
-    public string TextContent { get; private set; }
-    public string FileName { get; private set; }
+    public string TextContent { get; private set; } = string.Empty;
+    public string FileName { get; private set; } = string.Empty;
     public Guid? LaneId { get; set; }
 
     #endregion Properties

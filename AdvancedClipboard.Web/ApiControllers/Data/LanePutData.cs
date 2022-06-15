@@ -6,9 +6,9 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
   {
     #region Properties
 
-    public string Color { get; set; }
+    public string Color { get; set; } = string.Empty;
     public Guid Id { get; set; }
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     #endregion Properties
   }

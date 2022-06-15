@@ -4,7 +4,7 @@
   {
     public Guid? LaneId { get; set; }
 
-    public string? ReturnUrl { get; set; }
+    public string ReturnUrl { get; set; } = string.Empty;
 
     public string Color { get; set; } = string.Empty;
 
