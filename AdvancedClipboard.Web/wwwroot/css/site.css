@@ -87,3 +87,23 @@ body {
 .card {
   border: none;
 }
+
+.clipboard-preview {
+  color: #ccc !important;
+}
+
+.clipboard-preview::-webkit-input-placeholder {
+  font-family: 'bootstrap-icons', Arial, Helvetica, sans-serif;
+}
+
+.clipboard-preview:-ms-input-placeholder {
+  font-family: 'bootstrap-icons', Arial, Helvetica, sans-serif;
+}
+
+.clipboard-preview:-moz-placeholder {
+  font-family: 'bootstrap-icons', Arial, Helvetica, sans-serif;
+}
+
+.clipboard-preview::-moz-placeholder {
+  font-family: 'bootstrap-icons', Arial, Helvetica, sans-serif;
+}

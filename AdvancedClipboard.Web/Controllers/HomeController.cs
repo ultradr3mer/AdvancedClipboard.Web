@@ -52,19 +52,6 @@ namespace AdvancedClipboard.Web.Controllers
       return View(model);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Index(HomeIndexModel data, string? returnurl = null)
-    {
-      HttpContext.Items.TryGetValue("returnurl", out object? test);
-
-      var userId = this.User.GetId();
-
-      var apiData = new ClipboardPostPlainTextData() { Content = data.ContentToAdd, LaneGuid = data.CurrentLaneId };
-      await this.repository.PostPlainTextAsync(userId, apiData);
-
-      return LocalRedirect(data.ReturnUrl);
-    }
-
     public IActionResult Privacy()
     {
       return View();

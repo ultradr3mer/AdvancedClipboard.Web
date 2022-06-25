@@ -3,39 +3,44 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AdvancedClipboard.Web.Models
 {
+  /// <summary>
+  /// A clipboard lane.
+  /// </summary>
+  public class LaneEntity
+  {
+    #region Properties
+
     /// <summary>
-    /// A clipboard lane.
+    /// The color.
     /// </summary>
-    public class LaneEntity
-    {
-        #region Properties
+    public string Color { get; set; } = string.Empty;
 
-        /// <summary>
-        /// The color.
-        /// </summary>
-        public string Color { get; set; } = string.Empty;
+    /// <summary>
+    /// The id.
+    /// </summary>
+    [Key]
+    public Guid Id { get; set; }
 
-        /// <summary>
-        /// The id.
-        /// </summary>
-        [Key]
-        public Guid Id { get; set; }
+    /// <summary>
+    /// The name.
+    /// </summary>
+    public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// The name.
-        /// </summary>
-        public string Name { get; set; } = string.Empty;
+    /// <summary>
+    /// The owner.
+    /// </summary>
+    public ApplicationUser? User { get; set; }
 
-        /// <summary>
-        /// The owner.
-        /// </summary>
-        public ApplicationUser? User { get; set; }
+    /// <summary>
+    /// The owners id.
+    /// </summary>
+    public Guid UserId { get; set; }
 
-        /// <summary>
-        /// The owners id.
-        /// </summary>
-        public Guid UserId { get; set; }
+    /// <summary>
+    /// The linked ClipboardContent items.
+    /// </summary>
+    public List<ClipboardContentEntity> ClipboardContentItems { get; set; } = new List<ClipboardContentEntity>();
 
-        #endregion Properties
-    }
+    #endregion Properties
+  }
 }

@@ -34,13 +34,31 @@ namespace AdvancedClipboard.Web.Controllers
       return View(model);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Index(DetailsModel model)
+    [HttpPost(nameof(Put))]
+    public async Task<IActionResult> Put(DetailsModel model)
     {
       var userId = this.User.GetId();
 
       var data = TypeAdapter.Adapt<ClipboardPutData>(model);
       await this.repository.Put(data, userId);
+
+      return LocalRedirect(model.ReturnUrl);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post(DetailsModel model)
+    {
+      if(string.IsNullOrEmpty(model.TextContent))
+      {
+        throw new Exception("Text must not be empty.");
+      }
+
+      HttpContext.Items.TryGetValue("returnurl", out object? test);
+
+      var userId = this.User.GetId();
+
+      var apiData = new ClipboardPostPlainTextData() { Content = model.TextContent, LaneGuid = model.LaneId };
+      await this.repository.PostPlainTextAsync(userId, apiData);
 
       return LocalRedirect(model.ReturnUrl);
     }

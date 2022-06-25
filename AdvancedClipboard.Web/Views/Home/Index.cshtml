@@ -36,7 +36,7 @@
                       @title
                       @if (Model.CurrentLaneId != null)
                       {
-                        <a class="btn" asp-controller="details" asp-action="lane" asp-route-id="Model.CurrentLaneId"><i class="bi bi-pen"></i></a>
+                        <a class="btn" asp-controller="Lane" asp-action="edit" asp-route-id="@Model.CurrentLaneId" asp-route-returnurl="@fullPath"><i class="bi bi-pen"></i></a>
                       }
                     </h3>
                   </div>
@@ -44,9 +44,11 @@
                     <form class="from-inline float-end" method="post">
                       <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="@fullPath">
                       <div class="input-group">
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         <input class="form-control bg-dark border-0 text-white" id="Name" name="Name" width="200" placeholder="Add lane" type="text" value="">
                         <input type="color" class="pb-1 pt-1 btn btn-dark form-control-color lane-color-picker" name="color" value="#ff0000">
                         <button class="btn btn-light" asp-controller="lane" asp-action="" type="submit"><i class="bi bi-plus-circle"></i></button>
+                        <span asp-validation- class="text-danger"></span>
                       </div>
                     </form>
                   </div>
@@ -69,28 +71,25 @@
     }
     <div class="row">
       <div class="col-12 pe-2">
-        <div class="row pt-3">
-          <div class="col col pe-0">
-            @using (Html.BeginForm("Index", "Home", FormMethod.Post))
-            {
+        @using (Html.BeginForm(string.Empty, "Details", FormMethod.Post, new { id = "paste-form" }))
+        {
+          @Html.Hidden(nameof(DetailsModel.ReturnUrl), fullPath)
+          @Html.Hidden(nameof(DetailsModel.LaneId), Model?.CurrentLaneId)
+          <div class="row">
+            <div class="col-12 col-lg-6 mt-3">
               <div class="input-group">
-                @Html.TextBoxFor(m => m.ContentToAdd, new { @class="form-control bg-medium border-0 text-white", placeholder="Quick add note" })
-                @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
-                @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
+                @Html.TextArea(nameof(DetailsModel.TextContent), string.Empty, new { id = "paste-field", @class="form-control bg-medium border-0 text-white", placeholder="Quick add note", rows="1", wrap="hard" })
                 <button class="btn btn-primary text-white" type="submit"><i class="bi bi-plus-circle"></i></button>
               </div>
-            }
+            </div>
+            <div class="col-12 col-lg-6 mt-3">
+              <div class="input-group">
+                <textarea  class="form-control bg-dark border-medium clipboard-preview clipboard-text" rows="1" placeholder=" Preview" disabled="true"></textarea>
+                <button id="paste-button" class="btn btn-primary paste-button text-white" type="button" ><i class="bi bi-clipboard-plus"></i></button>
+              </div>
+            </div>
           </div>
-          <div class="col-auto">
-            @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "PasteForm" }))
-            {
-              @Html.Hidden(nameof(Model.ContentToAdd), string.Empty)
-              @Html.Hidden(nameof(Model.ReturnUrl), fullPath)
-              @Html.Hidden(nameof(Model.CurrentLaneId), Model.CurrentLaneId)
-              <button class="btn btn-primary paste-button text-white" type="button"><i class="bi bi-clipboard-plus"></i></button>
-            }
-          </div>
-        </div>
+        }
       </div>
     </div>
     <div class="row pt-3 pb-3">
@@ -141,3 +140,7 @@
     </div>
   </div>
 </main>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

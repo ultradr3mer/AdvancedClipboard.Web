@@ -11338,3 +11338,11 @@ textarea.form-control-lg {
 .navbar-dark .navbar-toggler {
   border-color: #0078d7;
 }
+
+.navbar-dark .navbar-toggler {
+  border-color: #0078d7;
+}
+
+.form-control {
+  font-weight: 300;
+}

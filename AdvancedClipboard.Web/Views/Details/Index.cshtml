@@ -20,22 +20,24 @@
           <div class="card-body">
             @using (Html.BeginForm("Index", "Details", FormMethod.Post))
             {
+              @Html.HiddenFor(m => m.ReturnUrl)
+              @Html.HiddenFor(m => m.FileName)
+              @Html.HiddenFor(m => m.Id)
+              <div class="mb-3">
               <div class="form-group">
-                <label for="content">Content</label>
+                <label for="content" class="form-label">Content</label>
                 @Html.TextAreaFor(m => m.TextContent, new { @class="form-control bg-dark text-white border-0", id="content", rows="20" })
               </div>
+              </div>
               <div class="row align-items-end">
-                <div class="col-12 col-md-6">
-                  <div class="form-group align-self-start" style="max-width: 300px;">
-                    <label for="select">Lane</label>
-                    <select class="form-control bg-dark text-white border-0" asp-items="@Model.Lanes" asp-for="LaneId" id="select"> </select>
+                <div class="col-12 col-md-6 mb-3">
+                  <div class="form-group">
+                  <label for="select" class="form-label"  style="max-width: 300px;">Lane</label>
+                  <select class="form-control float-start bg-dark text-white border-0" asp-items="@Model.Lanes" asp-for="LaneId" id="select"> </select>
                   </div>
                 </div>
-                @Html.HiddenFor(m => m.ReturnUrl)
-                @Html.HiddenFor(m => m.FileName)
-                @Html.HiddenFor(m => m.Id)
-                <div class="col-12 col-md-6">
-                  <button class="btn btn-primary float-end mb-1" type="submit">Save<i class="bi bi-save ms-2"></i></button>
+                <div class="col-12 col-md-6 mb-3">
+                  <button class="btn btn-primary float-end mb-1 text-white" type="submit">Save<i class="bi bi-save ms-2"></i></button>
                 </div>
               </div>
             }

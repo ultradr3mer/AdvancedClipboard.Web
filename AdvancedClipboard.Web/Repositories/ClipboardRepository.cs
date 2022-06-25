@@ -9,10 +9,12 @@ namespace AdvancedClipboard.Web.Repositories
   public class ClipboardRepository
   {
     private readonly ApplicationDbContext context;
+    private readonly LaneRepository laneRepository;
 
-    public ClipboardRepository(ApplicationDbContext context)
+    public ClipboardRepository(ApplicationDbContext context, LaneRepository laneRepository)
     {
       this.context = context;
+      this.laneRepository = laneRepository;
     }
 
     internal async Task<ClipboardContainerGetData> GetWithContextAsync(Guid? id, Guid userId)
@@ -28,7 +30,7 @@ namespace AdvancedClipboard.Web.Repositories
                                               })
                                              .OrderByDescending(o => o.date).Select(o => o.data).ToListAsync();
 
-      List<LaneGetData> lanes = await LaneController.GetLanesForUser(this.context, userId);
+      List<LaneGetData> lanes = await this.laneRepository.GetLanesForUser(userId, null);
 
       ClipboardContainerGetData result = new ClipboardContainerGetData()
       {
@@ -66,7 +68,7 @@ namespace AdvancedClipboard.Web.Repositories
                                               && cc.LaneId == lane
                                               select ClipboardGetData.CreateFromEntity(cc, cc.FileToken)).ToListAsync();
 
-      List<LaneGetData> lanes = await LaneController.GetLanesForUser(context, userId);
+      List<LaneGetData> lanes = await this.laneRepository.GetLanesForUser(userId, null);
 
       ClipboardContainerGetData result = new ClipboardContainerGetData()
       {

@@ -20,33 +20,26 @@ namespace AdvancedClipboard.Web.ApiControllers
     private readonly SignInManager<ApplicationUser> signInManager;
     private readonly ApplicationDbContext context;
     private readonly LaneRepository repository;
+    private readonly LaneRepository laneRepository;
 
     #endregion Fields
 
     #region Constructors
 
-    public LaneController(SignInManager<ApplicationUser> _signInManager, ApplicationDbContext context, LaneRepository repository)
+    public LaneController(SignInManager<ApplicationUser> _signInManager,
+                          ApplicationDbContext context,
+                          LaneRepository repository,
+                          LaneRepository laneRepository)
     {
       this.signInManager = _signInManager;
       this.context = context;
       this.repository = repository;
-    }
-
-    internal static Task<List<LaneGetData>> GetLanesForUser(object context, Guid userId)
-    {
-      throw new NotImplementedException();
+      this.laneRepository = laneRepository;
     }
 
     #endregion Constructors
 
     #region Methods
-
-    public static async Task<List<LaneGetData>> GetLanesForUser(ApplicationDbContext context, Guid userId)
-    {
-      return await (from lane in context.Lane
-                    where lane.UserId == userId
-                    select LaneRepository.CreateGetDataFromEntity(lane)).ToListAsync();
-    }
 
     [HttpPut("AssignContent")]
     public async Task<ActionResult> AssignContent(AssignContentToLanePutData data)
@@ -71,16 +64,7 @@ namespace AdvancedClipboard.Web.ApiControllers
     {
       var userId = this.User.GetId();
 
-      LaneEntity lane = await context.Lane.FindAsync(laneId) ?? throw new Exception("Lane not Found");
-      if (lane.UserId != userId)
-      {
-        throw new Exception("Lane not Found");
-      }
-
-      context.Remove(lane);
-
-      await context.SaveChangesAsync();
-
+      await this.repository.DeleteAsync(userId, laneId);
       return this.Ok();
     }
 
@@ -89,7 +73,17 @@ namespace AdvancedClipboard.Web.ApiControllers
     {
       var userId = this.User.GetId();
 
-      List<LaneGetData> result = await GetLanesForUser(context, userId);
+      List<LaneGetData> result = await this.laneRepository.GetLanesForUser(userId, null);
+
+      return result;
+    }
+
+    [HttpGet]
+    public async Task<IEnumerable<LaneGetData>> Get(Guid id)
+    {
+      var userId = this.User.GetId();
+
+      List<LaneGetData> result = await this.laneRepository.GetLanesForUser(userId, null);
 
       return result;
     }
@@ -99,7 +93,7 @@ namespace AdvancedClipboard.Web.ApiControllers
     {
       var userId = this.User.GetId();
 
-      var result = await this.repository.PostAsync(data, userId);
+      var result = await this.repository.PostAsync(userId, data);
 
       return result;
     }
@@ -109,16 +103,8 @@ namespace AdvancedClipboard.Web.ApiControllers
     {
       var userId = this.User.GetId();
 
-      LaneEntity lane = await context.Lane.FindAsync(data.Id) ?? throw new Exception("Lane not Found");
-      if (lane.UserId != userId)
-      {
-        throw new Exception("Lane not Found");
-      }
+      await this.repository.PutAsync(userId, data);
 
-      lane.Name = data.Name;
-      lane.Color = data.Color;
-
-      await context.SaveChangesAsync();
 
       return this.Ok();
     }

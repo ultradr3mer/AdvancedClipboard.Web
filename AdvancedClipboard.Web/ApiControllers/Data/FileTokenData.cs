@@ -1,5 +1,4 @@
 ﻿using AdvancedClipboard.Web.Models;
-using System;
 
 namespace AdvancedClipboard.Web.ApiControllers.Data
 {
@@ -24,9 +23,9 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
     /// <param name="entity">The base entity.</param>
     public FileTokenData(FileAccessTokenEntity entity)
     {
-      Id = entity.Id;
-      Filename = entity.Filename;
-      Token = entity.Token.ToString("X");
+      this.Id = entity.Id;
+      this.Filename = entity.Filename;
+      this.Token = entity.Token.ToString("X");
     }
 
     #endregion Constructors
@@ -36,7 +35,7 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
     /// <summary>
     /// The filename.
     /// </summary>
-    public string Filename { get; set; }
+    public string Filename { get; set; } = string.Empty;
 
     /// <summary>
     /// The id of the token.
@@ -46,7 +45,7 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
     /// <summary>
     /// The access token.
     /// </summary>
-    public string Token { get; set; }
+    public string Token { get; set; } = string.Empty;
 
     #endregion Properties
 
@@ -58,7 +57,7 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
     /// <returns>The local url.</returns>
     internal string GetUrl()
     {
-      return $"{Token:X}/{Filename}";
+      return $"{this.Token:X}/{this.Filename}";
     }
 
     /// <summary>

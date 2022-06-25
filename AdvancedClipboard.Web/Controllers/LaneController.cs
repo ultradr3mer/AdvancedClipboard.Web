@@ -23,12 +23,56 @@ namespace AdvancedClipboard.Web.Controllers
     [HttpPost]
     public async Task<IActionResult> Post(LaneDetailsModel model)
     {
+      if (string.IsNullOrEmpty(model.Name))
+      {
+        throw new Exception("Text must not be empty.");
+      }
+
       var userId = this.User.GetId();
 
       var data = TypeAdapter.Adapt<LanePostData>(model);
-      await this.repository.PostAsync(data, userId);
+      await this.repository.PostAsync(userId, data);
 
       return LocalRedirect(model.ReturnUrl);
+    }
+
+    [HttpPost(nameof(Put))]
+    public async Task<IActionResult> Put(LaneDetailsModel model)
+    {
+      if (string.IsNullOrEmpty(model.Name))
+      {
+        throw new Exception("Text must not be empty.");
+      }
+
+      var userId = this.User.GetId();
+
+      var data = TypeAdapter.Adapt<LanePutData>(model);
+      await this.repository.PutAsync(userId, data);
+
+      return LocalRedirect(model.ReturnUrl);
+    }
+
+    [HttpPost(nameof(Delete))]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+      var userId = this.User.GetId();
+
+      await this.repository.DeleteAsync(userId, id);
+
+      return LocalRedirect("/");
+    }
+
+    [HttpGet(nameof(Edit))]
+    public async Task<IActionResult> Edit(Guid id, string returnUrl)
+    {
+      var userId = this.User.GetId();
+
+      var lanes = await repository.GetLanesForUser(userId, id);
+      var data = lanes.Single();
+      var model = TypeAdapter.Adapt<LaneDetailsModel>(data);
+      model.ReturnUrl = returnUrl;
+
+      return this.View(model);
     }
   }
 }
