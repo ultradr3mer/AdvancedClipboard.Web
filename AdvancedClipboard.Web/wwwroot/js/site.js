@@ -57,7 +57,11 @@
     update_preview();
   })
 
-  $("#paste-field").change(function () {
+  $(window).scroll(function () {
+    update_preview();
+  });
+
+  $("#paste-field").focusout(function () {
     var text = $(this).val();
     text = $.trim(text);
 
@@ -79,12 +83,14 @@
   $(".add-to-clipboard").click(async function () {
     var text = $(this).parents(".clipboard-card").find(".clipboard-text").text();
     await navigator.clipboard.writeText(text);
+    update_preview();
   });
 
   $(".clipboard-text").click(async function () {
     var text = $(this).text();
     await navigator.clipboard.writeText(text);
     flash($(this).parents(".clipboard-card"));
+    update_preview();
   })
 
   $(".expand-clipboard").click(function () {
