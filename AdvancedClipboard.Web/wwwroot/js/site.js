@@ -28,6 +28,16 @@
     form.submit();
   };
 
+  var text_input_leave = function (field) {
+    var text = field.val();
+    text = $.trim(text);
+
+    var lines = text.split(/\r\n|\r|\n/).length;
+    field.attr("rows", Math.min(lines, 5));
+
+    field.val(text);
+  };
+
   var update_preview = async function () {
     var text;
     try {
@@ -61,14 +71,14 @@
     update_preview();
   });
 
-  $("#paste-field").focusout(function () {
-    var text = $(this).val();
-    text = $.trim(text);
+  $("#post-button").bind("mousedown", function () {
+    var form = $("#paste-form");
+    text_input_leave(form.find("#paste-field"));
+    form.submit();
+  })
 
-    var lines = text.split(/\r\n|\r|\n/).length;
-    $(this).attr("rows", Math.min(lines, 5));
-
-    $(this).val(text);
+  $("#paste-field").focusout(async function () {
+    text_input_leave($(this));
   })
 
   $("#paste-field").focusin(function () {
@@ -79,12 +89,6 @@
     var text = await navigator.clipboard.readText();
     paste_and_commit(text);
   })
-
-  $(".add-to-clipboard").click(async function () {
-    var text = $(this).parents(".clipboard-card").find(".card-data").text();
-    await navigator.clipboard.writeText(text);
-    update_preview();
-  });
 
   $(".clipboard-text").click(async function () {
     var text = $(this).find(".card-data").text();

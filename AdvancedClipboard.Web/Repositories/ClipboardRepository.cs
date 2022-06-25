@@ -66,7 +66,12 @@ namespace AdvancedClipboard.Web.Repositories
                                               where cc.UserId == userId
                                               && cc.IsArchived == false
                                               && cc.LaneId == lane
-                                              select ClipboardGetData.CreateFromEntity(cc, cc.FileToken)).ToListAsync();
+                                              select new
+                                              {
+                                                data = ClipboardGetData.CreateFromEntity(cc, cc.FileToken),
+                                                date = cc.CreationDate
+                                              })
+                                              .OrderByDescending(o => o.date).Select(o => o.data).ToListAsync();
 
       List<LaneGetData> lanes = await this.laneRepository.GetLanesForUser(userId, null);
 
