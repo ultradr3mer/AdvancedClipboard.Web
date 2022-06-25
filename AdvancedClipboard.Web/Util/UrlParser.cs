@@ -20,20 +20,25 @@ namespace AdvancedClipboard.Web.Util
       var matchCollection = regex.Matches(text);
       if(matchCollection.Count == 0)
       {
-        return new HtmlString(HttpUtility.HtmlEncode(text));
+        return new HtmlString(Encode(text));
       }
 
       int index = 0;
       StringBuilder sb = new StringBuilder();
       foreach (Match match in matchCollection)
       {
-        sb.Append(HttpUtility.HtmlEncode(text.Substring(index, match.Index - index)));
-        sb.Append($"<a href=\"{match.Value}\">{HttpUtility.HtmlEncode(match.Value)}</a>");
+        sb.Append(Encode(text.Substring(index, match.Index - index)));
+        sb.Append($"<a href=\"{match.Value}\">{Encode(match.Value)}</a>");
         index = match.Index + match.Length;
       }
 
-      sb.Append(HttpUtility.HtmlEncode(text.Substring(index, text.Length - index)));
+      sb.Append(Encode(text.Substring(index, text.Length - index)));
       return new HtmlString(sb.ToString());
+    }
+
+    private static string Encode(string text)
+    {
+      return HttpUtility.HtmlEncode(text).Replace("\r\n", "<br />").Replace("\n", "<br />");
     }
   }
 }

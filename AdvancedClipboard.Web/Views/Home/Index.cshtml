@@ -77,14 +77,16 @@
           @Html.Hidden(nameof(DetailsModel.LaneId), Model?.CurrentLaneId)
           <div class="row">
             <div class="col-12 col-lg-6 mt-3">
+                <label for="paste-field" class="form-label">Text input</label>
               <div class="input-group">
                 @Html.TextArea(nameof(DetailsModel.TextContent), string.Empty, new { id = "paste-field", @class="form-control bg-medium border-0 text-white", placeholder="Quick add note", rows="1", wrap="hard" })
                 <button class="btn btn-primary text-white" type="submit"><i class="bi bi-plus-circle"></i></button>
               </div>
             </div>
             <div class="col-12 col-lg-6 mt-3">
+                <label for="paste-field" class="form-label">Clipboard content</label>
               <div class="input-group">
-                <textarea  class="form-control bg-dark border-medium clipboard-preview clipboard-text" rows="1" placeholder=" Preview" disabled="true"></textarea>
+                <textarea  class="form-control bg-medium-dark border-0 clipboard-preview clipboard-text" rows="1" placeholder=" Empty" disabled="true"></textarea>
                 <button id="paste-button" class="btn btn-primary paste-button text-white" type="button" ><i class="bi bi-clipboard-plus"></i></button>
               </div>
             </div>
@@ -123,7 +125,10 @@
             <div class="card-body clipboard-card-body">
               @if (entry.ContentTypeId == ContentTypes.PlainText)
               {
-                <p class="card-text clipboard-text">@UrlParser.ConvertToHtmlWithLinks(entry.TextContent)</p>
+                <span class="clipboard-text">
+                  <p class="card-text">@UrlParser.ConvertToHtmlWithLinks(entry.TextContent)</p>
+                  <pre class="d-none card-data">@entry.TextContent</pre>
+                </span>
               }
               else if (entry.ContentTypeId == ContentTypes.Image)
               {

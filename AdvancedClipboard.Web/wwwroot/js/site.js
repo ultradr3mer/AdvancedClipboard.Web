@@ -81,13 +81,13 @@
   })
 
   $(".add-to-clipboard").click(async function () {
-    var text = $(this).parents(".clipboard-card").find(".clipboard-text").text();
+    var text = $(this).parents(".clipboard-card").find(".card-data").text();
     await navigator.clipboard.writeText(text);
     update_preview();
   });
 
   $(".clipboard-text").click(async function () {
-    var text = $(this).text();
+    var text = $(this).find(".card-data").text();
     await navigator.clipboard.writeText(text);
     flash($(this).parents(".clipboard-card"));
     update_preview();
