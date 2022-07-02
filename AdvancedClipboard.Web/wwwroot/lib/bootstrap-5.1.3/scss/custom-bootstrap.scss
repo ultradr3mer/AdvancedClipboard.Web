@@ -70,3 +70,40 @@
 .form-control {
   font-weight: 300;
 }
+
+.scrollbar-medium::-webkit-scrollbar {
+  background-color: $medium;
+  width: 16px;
+}
+
+.scrollbar-medium::-webkit-scrollbar-track {
+  border-radius: 3px;
+}
+
+.scrollbar-medium::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: $secondary;
+}
+
+.scrollbar-medium::-webkit-resizer {
+  background-color: $medium;
+}
+
+.scrollbar-medium-dark::-webkit-scrollbar {
+  background-color: $medium-dark;
+  width: 16px;
+}
+
+.scrollbar-medium-dark::-webkit-scrollbar-track {
+  border-radius: 3px;
+}
+
+.scrollbar-medium-dark::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: $secondary;
+}
+
+.scrollbar-medium-dark::-webkit-resizer {
+  background-color: $medium-dark;
+}
+

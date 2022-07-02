@@ -79,14 +79,14 @@
             <div class="col-12 col-lg-6 mt-3">
                 <label for="paste-field" class="form-label">Text input</label>
               <div class="input-group">
-                @Html.TextArea(nameof(DetailsModel.TextContent), string.Empty, new { id = "paste-field", @class="form-control bg-medium border-0 text-white", placeholder="Quick add note", rows="1", wrap="hard" })
+                @Html.TextArea(nameof(DetailsModel.TextContent), string.Empty, new { id = "paste-field", @class="form-control bg-medium border-0 text-white scrollbar-medium", placeholder="Quick add note", rows="1", wrap="hard" })
                 <button id="post-button" class="btn btn-primary text-white" type="button"><i class="bi bi-plus-circle"></i></button>
               </div>
             </div>
             <div class="col-12 col-lg-6 mt-3">
                 <label for="paste-field" class="form-label">Clipboard content</label>
               <div class="input-group">
-                <textarea  class="form-control bg-medium-dark border-0 clipboard-preview clipboard-text" rows="1" placeholder=" Empty" disabled="true"></textarea>
+                <textarea  class="form-control bg-medium-dark border-0 clipboard-preview scrollbar-medium-dark" rows="1" placeholder=" Empty" disabled="true"></textarea>
                 <button id="paste-button" class="btn btn-primary paste-button text-white" type="button" ><i class="bi bi-clipboard-plus"></i></button>
               </div>
             </div>

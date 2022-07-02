@@ -11346,3 +11346,39 @@ textarea.form-control-lg {
 .form-control {
   font-weight: 300;
 }
+
+.scrollbar-medium::-webkit-scrollbar {
+  background-color: #303030;
+  width: 16px;
+}
+
+.scrollbar-medium::-webkit-scrollbar-track {
+  border-radius: 3px;
+}
+
+.scrollbar-medium::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: #777;
+}
+
+.scrollbar-medium::-webkit-resizer {
+  background-color: #303030;
+}
+
+.scrollbar-medium-dark::-webkit-scrollbar {
+  background-color: #272727;
+  width: 16px;
+}
+
+.scrollbar-medium-dark::-webkit-scrollbar-track {
+  border-radius: 3px;
+}
+
+.scrollbar-medium-dark::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: #777;
+}
+
+.scrollbar-medium-dark::-webkit-resizer {
+  background-color: #272727;
+}

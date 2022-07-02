@@ -107,3 +107,13 @@ body {
 .clipboard-preview::-moz-placeholder {
   font-family: 'bootstrap-icons', Arial, Helvetica, sans-serif;
 }
+
+.scrollbar-medium::-webkit-resizer {
+  background-image: url(../images/size_grip.png);
+  background-size: 16px;
+}
+
+.scrollbar-medium-dark::-webkit-resizer {
+  background-image: url(../images/size_grip.png);
+  background-size: 16px;
+}
