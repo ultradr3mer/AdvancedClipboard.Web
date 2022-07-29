@@ -26,7 +26,7 @@
     @if (Model?.Lanes != null)
     {
       <div class="row">
-        <div class="col-12 pe-2">
+        <div class="col-12 pb-3">
           <div class="card text-white clipboard-card" style="@laneStyle">
             <div class="card-header lane-card-header">
               <div class="container ps-3 pe-3">
@@ -43,12 +43,11 @@
                   <div class="col-12 col-md pe-0 pb-1">
                     <form class="from-inline float-end" method="post">
                       <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="@fullPath">
+                      <div asp-validation-summary="All" class="text-danger"></div>
                       <div class="input-group">
-                        <div asp-validation-summary="All" class="text-danger"></div>
                         <input class="form-control bg-dark border-0 text-white" id="Name" name="Name" width="200" placeholder="Add lane" type="text" value="">
                         <input type="color" class="pb-1 pt-1 btn btn-dark form-control-color lane-color-picker" name="color" value="#ff0000">
                         <button class="btn btn-light" asp-controller="lane" asp-action="" type="submit"><i class="bi bi-plus-circle"></i></button>
-                        <span asp-validation- class="text-danger"></span>
                       </div>
                     </form>
                   </div>
@@ -70,34 +69,68 @@
       </div>
     }
     <div class="row">
-      <div class="col-12 pe-2">
-        @using (Html.BeginForm(string.Empty, "Details", FormMethod.Post, new { id = "paste-form" }))
-        {
-          @Html.Hidden(nameof(DetailsModel.ReturnUrl), fullPath)
-          @Html.Hidden(nameof(DetailsModel.LaneId), Model?.CurrentLaneId)
-          <div class="row">
-            <div class="col-12 col-lg-6 mt-3">
-                <label for="paste-field" class="form-label">Text input</label>
-              <div class="input-group">
-                @Html.TextArea(nameof(DetailsModel.TextContent), string.Empty, new { id = "paste-field", @class="form-control bg-medium border-0 text-white scrollbar-medium", placeholder="Quick add note", rows="1", wrap="hard" })
-                <button id="post-button" class="btn btn-primary text-white" type="button"><i class="bi bi-plus-circle"></i></button>
+      <div class="col-12 pb-3">
+        <div class="accordion" id="accordionAdd">
+          @using (Html.BeginForm(string.Empty, "Details", FormMethod.Post, new { id = "paste-form" }))
+          {
+            @Html.Hidden(nameof(DetailsModel.ReturnUrl), fullPath)
+            @Html.Hidden(nameof(DetailsModel.LaneId), Model?.CurrentLaneId)
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Clipboard Content
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse bg-medium show" aria-labelledby="headingOne" data-bs-parent="#accordionAdd">
+                <div class="accordion-body">
+                  <div class="input-group">
+                    <textarea class="form-control bg-medium-dark border-0 clipboard-preview scrollbar-medium-dark" rows="1" placeholder=" Empty" disabled="true"></textarea>
+                    <button id="paste-button" class="btn btn-primary paste-button text-white" type="button"><i class="bi bi-clipboard-plus"></i></button>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="col-12 col-lg-6 mt-3">
-                <label for="paste-field" class="form-label">Clipboard content</label>
-              <div class="input-group">
-                <textarea  class="form-control bg-medium-dark border-0 clipboard-preview scrollbar-medium-dark" rows="1" placeholder=" Empty" disabled="true"></textarea>
-                <button id="paste-button" class="btn btn-primary paste-button text-white" type="button" ><i class="bi bi-clipboard-plus"></i></button>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Text input
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionAdd">
+                <div class="accordion-body">
+                  <div class="input-group">
+                    @Html.TextArea(nameof(DetailsModel.TextContent), string.Empty, new { id = "paste-field", @class="form-control bg-medium-dark border-0 text-white scrollbar-medium-dark", placeholder="", rows="1", wrap="hard" })
+                    <button class="btn btn-primary text-white" type="submit"><i class="bi bi-plus-circle"></i></button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        }
+          }
+          @using (Html.BeginForm("PostFile", "Details", FormMethod.Post, new { id = "upload-form" }))
+          {
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  File Uploard
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionAdd">
+                <div class="accordion-body">
+                  <div class="input-group">
+                    <input class="form-control bg-medium-dark border-1 border-medium-dark" type="file" id="file">
+                    <button class="btn btn-primary text-white" type="submit"><i class="bi bi-plus-circle"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
       </div>
     </div>
     <div class="row pt-3 pb-3">
       @foreach (var entry in Model!.Entries)
       {
-        <div class="col-12 col-md-6 col-lg-3 pb-3 pe-2 ">
+        <div class="col-12 col-md-6 col-lg-3 pb-3">
           <div class="card text-white bg-medium hadow-sm clipboard-card" style="border-left: .3em solid @laneColors[entry.LaneId ?? Guid.Empty] ;">
             <div class="card-header clipboard-card-header">
               <form method="post">
@@ -147,5 +180,5 @@
 </main>
 
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
+  <partial name="_ValidationScriptsPartial" />
 }
