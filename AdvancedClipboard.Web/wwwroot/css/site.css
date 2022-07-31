@@ -6,12 +6,12 @@ body {
 
 .logo {
   margin: 0;
-  height: 60px;
+  height: 50px;
 }
 
 .logo-text {
   font-family: Signika Negative;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
 }
 
 .navbar {

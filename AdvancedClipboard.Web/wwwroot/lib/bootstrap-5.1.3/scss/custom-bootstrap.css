@@ -11382,3 +11382,8 @@ textarea.form-control-lg {
 .scrollbar-medium-dark::-webkit-resizer {
   background-color: #272727;
 }
+
+.navbar-toggler-icon {
+  width: 1em;
+  height: 1em;
+}
