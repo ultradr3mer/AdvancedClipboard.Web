@@ -7,43 +7,39 @@
 }
 @model DetailsModel
 
-<main class="bg-dark pb-4 pt-3">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 pe-2">
-        <div class="card text-white clipboard-card text-white bg-medium">
-          <div class="card-header">
-            <h3 class="mb-0">
-              Details
-            </h3>
+<div class="row">
+  <div class="col-12 pe-2">
+    <div class="card text-white clipboard-card text-white bg-medium">
+      <div class="card-header">
+        <h3 class="mb-0">
+          Details
+        </h3>
+      </div>
+      <div class="card-body">
+        @using (Html.BeginForm("Index", "Details", FormMethod.Post))
+        {
+          @Html.HiddenFor(m => m.ReturnUrl)
+          @Html.HiddenFor(m => m.FileName)
+          @Html.HiddenFor(m => m.Id)
+          <div class="mb-3">
+            <div class="form-group">
+              <label for="content" class="form-label">Content</label>
+              @Html.TextAreaFor(m => m.TextContent, new { @class="form-control bg-dark text-white border-0", id="content", rows="20" })
+            </div>
           </div>
-          <div class="card-body">
-            @using (Html.BeginForm("Index", "Details", FormMethod.Post))
-            {
-              @Html.HiddenFor(m => m.ReturnUrl)
-              @Html.HiddenFor(m => m.FileName)
-              @Html.HiddenFor(m => m.Id)
-              <div class="mb-3">
+          <div class="row align-items-end">
+            <div class="col-12 col-md-6 mb-3">
               <div class="form-group">
-                <label for="content" class="form-label">Content</label>
-                @Html.TextAreaFor(m => m.TextContent, new { @class="form-control bg-dark text-white border-0", id="content", rows="20" })
+                <label for="select" class="form-label" style="max-width: 300px;">Lane</label>
+                <select class="form-control float-start bg-dark text-white border-0" asp-items="@Model.Lanes" asp-for="LaneId" id="select"> </select>
               </div>
-              </div>
-              <div class="row align-items-end">
-                <div class="col-12 col-md-6 mb-3">
-                  <div class="form-group">
-                  <label for="select" class="form-label"  style="max-width: 300px;">Lane</label>
-                  <select class="form-control float-start bg-dark text-white border-0" asp-items="@Model.Lanes" asp-for="LaneId" id="select"> </select>
-                  </div>
-                </div>
-                <div class="col-12 col-md-6 mb-3">
-                  <button class="btn btn-primary float-end mb-1 text-white" type="submit">Save<i class="bi bi-save ms-2"></i></button>
-                </div>
-              </div>
-            }
+            </div>
+            <div class="col-12 col-md-6 mb-3">
+              <button class="btn btn-primary float-end mb-1 text-white" type="submit">Save<i class="bi bi-save ms-2"></i></button>
+            </div>
           </div>
-        </div>
+        }
       </div>
     </div>
   </div>
-</main>
+</div>

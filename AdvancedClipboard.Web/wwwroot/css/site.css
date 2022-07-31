@@ -29,11 +29,6 @@ body {
   width: .3em;
 }
 
-.collapse.show {
-  padding-bottom: .5rem !important;
-  padding-left: .5rem !important;
-}
-
 .clipboard-text {
   overflow: hidden;
   text-overflow: ellipsis;

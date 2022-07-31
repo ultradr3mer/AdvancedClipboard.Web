@@ -20,166 +20,161 @@
 }
 @model HomeIndexModel
 
-<main class="bg-dark pb-4 pt-3">
-
-  <div class="container">
-    @if (Model?.Lanes != null)
-    {
-      <div class="row">
-        <div class="col-12 pb-3">
-          <div class="card text-white clipboard-card" style="@laneStyle">
-            <div class="card-header lane-card-header">
-              <div class="container ps-3 pe-3">
-                <div class="row">
-                  <div class="col-auto ps-0 pb-1">
-                    <h3 class="me-0">
-                      @title
-                      @if (Model.CurrentLaneId != null)
-                      {
-                        <a class="btn" asp-controller="Lane" asp-action="edit" asp-route-id="@Model.CurrentLaneId" asp-route-returnurl="@fullPath"><i class="bi bi-pen"></i></a>
-                      }
-                    </h3>
-                  </div>
-                  <div class="col-12 col-md pe-0 pb-1">
-                    <form class="from-inline float-end" method="post">
-                      <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="@fullPath">
-                      <div asp-validation-summary="All" class="text-danger"></div>
-                      <div class="input-group">
-                        <input class="form-control bg-dark border-0 text-white" id="Name" name="Name" width="200" placeholder="Add lane" type="text" value="">
-                        <input type="color" class="pb-1 pt-1 btn btn-dark form-control-color lane-color-picker" name="color" value="#ff0000">
-                        <button class="btn btn-light" asp-controller="lane" asp-action="" type="submit"><i class="bi bi-plus-circle"></i></button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
+@if (Model?.Lanes != null)
+{
+  <div class="row">
+    <div class="col-12 pb-3">
+      <div class="card text-white clipboard-card" style="@laneStyle">
+        <div class="card-header lane-card-header">
+          <div class="container ps-3 pe-3">
+            <div class="row">
+              <div class="col-auto ps-0 pb-1">
+                <h3 class="me-0">
+                  @title
+                  @if (Model.CurrentLaneId != null)
+                  {
+                    <a class="btn" asp-controller="Lane" asp-action="edit" asp-route-id="@Model.CurrentLaneId" asp-route-returnurl="@fullPath"><i class="bi bi-pen"></i></a>
+                  }
+                </h3>
               </div>
-            </div>
-            <div class="card-body lane-card-body">
-              @if (Model.CurrentLaneId != null)
-              {
-                <a class="btn m-1 bg-medium rounded-right show-all-button" asp-controller="home" asp-action="index"><i class="bi bi-arrow-left me-2"></i>Show all</a>
-              }
-              @foreach (var lane in Model.Lanes)
-              {
-                <a class="btn m-1 lane-button" style="background-color: @lane.Color ; color: @lane.TextColor ;" asp-controller="home" asp-action="lane" asp-route-laneid="@lane.Id">@lane.Name</a>
-              }
+              <div class="col-12 col-md pe-0 pb-1">
+                <form class="from-inline float-end" method="post">
+                  <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="@fullPath">
+                  <div asp-validation-summary="All" class="text-danger"></div>
+                  <div class="input-group">
+                    <input class="form-control bg-dark border-0 text-white" id="Name" name="Name" width="200" placeholder="Add lane" type="text" value="">
+                    <input type="color" class="pb-1 pt-1 btn btn-dark form-control-color lane-color-picker" name="color" value="#ff0000">
+                    <button class="btn btn-light" asp-controller="lane" asp-action="" type="submit"><i class="bi bi-plus-circle"></i></button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    }
-    <div class="row">
-      <div class="col-12 pb-3">
-        <div class="accordion" id="accordionAdd">
-          @using (Html.BeginForm(string.Empty, "Details", FormMethod.Post, new { id = "paste-form" }))
+        <div class="card-body lane-card-body">
+          @if (Model.CurrentLaneId != null)
           {
-            @Html.Hidden(nameof(DetailsModel.ReturnUrl), fullPath)
-            @Html.Hidden(nameof(DetailsModel.LaneId), Model?.CurrentLaneId)
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Clipboard Content
-                </button>
-              </h2>
-              <div id="collapseOne" class="accordion-collapse collapse bg-medium show" aria-labelledby="headingOne" data-bs-parent="#accordionAdd">
-                <div class="accordion-body">
-                  <div class="input-group">
-                    <textarea class="form-control bg-medium-dark border-0 clipboard-preview scrollbar-medium-dark" rows="1" placeholder=" Empty" disabled="true"></textarea>
-                    <button id="paste-button" class="btn btn-primary paste-button text-white" type="button"><i class="bi bi-clipboard-plus"></i></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  Text input
-                </button>
-              </h2>
-              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionAdd">
-                <div class="accordion-body">
-                  <div class="input-group">
-                    @Html.TextArea(nameof(DetailsModel.TextContent), string.Empty, new { id = "paste-field", @class="form-control bg-medium-dark border-0 text-white scrollbar-medium-dark", placeholder="", rows="1", wrap="hard" })
-                    <button class="btn btn-primary text-white" type="submit"><i class="bi bi-plus-circle"></i></button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <a class="btn m-1 bg-medium rounded-right show-all-button" asp-controller="home" asp-action="index"><i class="bi bi-arrow-left me-2"></i>Show all</a>
           }
-          @using (Html.BeginForm("PostFile", "Details", FormMethod.Post, new { id = "upload-form", enctype="multipart/form-data" }))
+          @foreach (var lane in Model.Lanes)
           {
-            @Html.Hidden(nameof(DetailsModel.ReturnUrl), fullPath)
-            @Html.Hidden(nameof(DetailsModel.LaneId), Model?.CurrentLaneId)
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                  File Uploard
-                </button>
-              </h2>
-              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionAdd">
-                <div class="accordion-body">
-                  <div class="input-group">
-                    <input class="form-control bg-medium-dark border-1 border-medium-dark" asp-for="File">
-                    <button class="btn btn-primary text-white" type="submit"><i class="bi bi-plus-circle"></i></button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <a class="btn m-1 lane-button" style="background-color: @lane.Color ; color: @lane.TextColor ;" asp-controller="home" asp-action="lane" asp-route-laneid="@lane.Id">@lane.Name</a>
           }
         </div>
       </div>
     </div>
-    <div class="row pt-3 pb-3">
-      @foreach (var entry in Model!.Entries)
+  </div>
+}
+<div class="row">
+  <div class="col-12 pb-3">
+    <div class="accordion" id="accordionAdd">
+      @using (Html.BeginForm(string.Empty, "Details", FormMethod.Post, new { id = "paste-form" }))
       {
-        <div class="col-12 col-md-6 col-lg-3 pb-3">
-          <div class="card text-white bg-medium hadow-sm clipboard-card" style="border-left: .3em solid @laneColors[entry.LaneId ?? Guid.Empty] ;">
-            <div class="card-header clipboard-card-header">
-              <form method="post">
-                <input name="id" type="hidden" value="@entry.Id">
-                <input name="returnurl" type="hidden" value="@fullPath">
-                <div class="btn-group btn-group-sm float-end m-1" role="group">
-                  <button type="button" class="btn btn-light expand-clipboard"><i class="bi bi-arrows-angle-expand"></i></button>
-                  <a class="btn btn-light"
-                   role="button" asp-area=""
-                   asp-controller="Details"
-                   asp-action="index"
-                   asp-route-id="@entry.Id"
-                   asp-route-returnurl="@fullPath">
-                    <i class="bi bi-pen"></i>
-                  </a>
-                  <button class="btn btn-light"
-                        role="button" asp-area=""
-                        asp-controller="Details"
-                        asp-action="delete">
-                    <i class="bi bi-x-lg"></i>
-                  </button>
-                </div>
-              </form>
+        @Html.Hidden(nameof(DetailsModel.ReturnUrl), fullPath)
+        @Html.Hidden(nameof(DetailsModel.LaneId), Model?.CurrentLaneId)
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Clipboard Content
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse bg-medium show" aria-labelledby="headingOne" data-bs-parent="#accordionAdd">
+            <div class="accordion-body">
+              <div class="input-group">
+                <textarea class="form-control bg-medium-dark border-0 clipboard-preview scrollbar-medium-dark" rows="1" placeholder=" Empty" disabled="true"></textarea>
+                <button id="paste-button" class="btn btn-primary paste-button text-white" type="button"><i class="bi bi-clipboard-plus"></i></button>
+              </div>
             </div>
-            <div class="card-body clipboard-card-body">
-              @if (entry.ContentTypeId == ContentTypes.PlainText)
-              {
-                <span class="clipboard-text">
-                  <p class="card-text">@UrlParser.ConvertToHtmlWithLinks(entry.TextContent)</p>
-                  <pre class="d-none card-data">@entry.TextContent</pre>
-                </span>
-              }
-              else if (entry.ContentTypeId == ContentTypes.Image)
-              {
-                <img class="clipboard-image" src="~/api/file/@entry.FileContentUrl" />
-              }
-              else if (entry.ContentTypeId == ContentTypes.File)
-              {
-                <span>file</span>
-              }
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Text input
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionAdd">
+            <div class="accordion-body">
+              <div class="input-group">
+                @Html.TextArea(nameof(DetailsModel.TextContent), string.Empty, new { id = "paste-field", @class="form-control bg-medium-dark border-0 text-white scrollbar-medium-dark", placeholder="", rows="1", wrap="hard" })
+                <button class="btn btn-primary text-white" type="submit"><i class="bi bi-plus-circle"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      @using (Html.BeginForm("PostFile", "Details", FormMethod.Post, new { id = "upload-form", enctype = "multipart/form-data" }))
+      {
+        @Html.Hidden(nameof(DetailsModel.ReturnUrl), fullPath)
+        @Html.Hidden(nameof(DetailsModel.LaneId), Model?.CurrentLaneId)
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              File Uploard
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionAdd">
+            <div class="accordion-body">
+              <div class="input-group">
+                <input class="form-control bg-medium-dark border-1 border-medium-dark" asp-for="File">
+                <button class="btn btn-primary text-white" type="submit"><i class="bi bi-plus-circle"></i></button>
+              </div>
             </div>
           </div>
         </div>
       }
     </div>
   </div>
-</main>
+</div>
+<div class="row pt-3 pb-3">
+  @foreach (var entry in Model!.Entries)
+  {
+    <div class="col-12 col-md-6 col-lg-3 pb-3">
+      <div class="card text-white bg-medium hadow-sm clipboard-card" style="border-left: .3em solid @laneColors[entry.LaneId ?? Guid.Empty] ;">
+        <div class="card-header clipboard-card-header">
+          <form method="post">
+            <input name="id" type="hidden" value="@entry.Id">
+            <input name="returnurl" type="hidden" value="@fullPath">
+            <div class="btn-group btn-group-sm float-end m-1" role="group">
+              <button type="button" class="btn btn-light expand-clipboard"><i class="bi bi-arrows-angle-expand"></i></button>
+              <a class="btn btn-light"
+               role="button" asp-area=""
+               asp-controller="Details"
+               asp-action="index"
+               asp-route-id="@entry.Id"
+               asp-route-returnurl="@fullPath">
+                <i class="bi bi-pen"></i>
+              </a>
+              <button class="btn btn-light"
+                    role="button" asp-area=""
+                    asp-controller="Details"
+                    asp-action="delete">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="card-body clipboard-card-body">
+          @if (entry.ContentTypeId == ContentTypes.PlainText)
+          {
+            <span class="clipboard-text">
+              <p class="card-text">@UrlParser.ConvertToHtmlWithLinks(entry.TextContent)</p>
+              <pre class="d-none card-data">@entry.TextContent</pre>
+            </span>
+          }
+          else if (entry.ContentTypeId == ContentTypes.Image)
+          {
+            <img class="clipboard-image" src="~/api/file/@entry.FileContentUrl" />
+          }
+          else if (entry.ContentTypeId == ContentTypes.File)
+          {
+            <span>file</span>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
 
 @section Scripts {
   <partial name="_ValidationScriptsPartial" />

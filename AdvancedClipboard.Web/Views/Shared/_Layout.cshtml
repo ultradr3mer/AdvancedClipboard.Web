@@ -28,8 +28,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto">
-@*          <li class="nav-item">
-            <a class="nav-link @(ViewData["Title"] as string == "Home" ? "text-primary" : "")" aria-current="page" asp-controller="home" asp-action="index">Home</a>
+          @*          <li class="nav-item">
+          <a class="nav-link @(ViewData["Title"] as string == "Home" ? "text-primary" : "")" aria-current="page" asp-controller="home" asp-action="index">Home</a>
           </li>*@
         </ul>
         <partial name="_LoginPartial" />
@@ -37,7 +37,11 @@
     </div>
   </nav>
 
-  @RenderBody()
+  <main class="bg-dark pb-4 pt-3">
+    <div class="container">
+        @RenderBody()
+    </div>
+  </main>
 
   <footer class="p-2 bg-light shadow-a">
     <div class="container">
