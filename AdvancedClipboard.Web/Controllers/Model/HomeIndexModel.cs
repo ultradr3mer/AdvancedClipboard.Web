@@ -17,5 +17,7 @@ namespace AdvancedClipboard.Web.Controllers.Model
     public DetailsModel ClipboardData { get; set; } = new DetailsModel();
 
     public LaneDetailsModel LaneData { get; set; } = new LaneDetailsModel();
+
+    public IFormFile? File { set; get; } 
   }
 }

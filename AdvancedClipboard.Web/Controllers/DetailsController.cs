@@ -1,4 +1,5 @@
-﻿using AdvancedClipboard.Web.ApiControllers.Data;
+﻿using AdvancedClipboard.Server.Repositories;
+using AdvancedClipboard.Web.ApiControllers.Data;
 using AdvancedClipboard.Web.Controllers.Model;
 using AdvancedClipboard.Web.Extensions;
 using AdvancedClipboard.Web.Repositories;
@@ -6,6 +7,8 @@ using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
 
 namespace AdvancedClipboard.Web.Controllers
 {
@@ -14,10 +17,12 @@ namespace AdvancedClipboard.Web.Controllers
   public class DetailsController : Controller
   {
     private readonly ClipboardRepository repository;
+    private readonly FileRepository fileRepository;
 
-    public DetailsController(ClipboardRepository repository)
+    public DetailsController(ClipboardRepository repository, FileRepository fileRepository)
     {
       this.repository = repository;
+      this.fileRepository = fileRepository;
     }
 
     [HttpGet]
@@ -71,6 +76,16 @@ namespace AdvancedClipboard.Web.Controllers
       await this.repository.Delete(model.Id, userId);
 
       return LocalRedirect(model.ReturnUrl);
+    }
+
+    [HttpPost("PostFile")]
+    public async Task<IActionResult> PostFile(IFormFile file, Guid? laneId, string returnurl)
+    {
+      var userId = this.User.GetId();
+
+      await this.fileRepository.PostFileInternal(file, userId, null, file.FileName, laneId);
+
+      return LocalRedirect(returnurl);
     }
   }
 }

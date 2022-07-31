@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Security.Cryptography;
 using AdvancedClipboard.Web;
+using AdvancedClipboard.Web.ApiControllers.Data;
+using AdvancedClipboard.Server.Constants;
 
 namespace AdvancedClipboard.Server.Repositories
 {
@@ -161,10 +163,10 @@ namespace AdvancedClipboard.Server.Repositories
     }
     private async Task<FileAccessTokenEntity> TryUpdateToken(ApplicationDbContext context, Guid userId, string fileName)
     {
-      FileAccessTokenEntity token = await (from t in context.FileAccessToken
-                                           where t.Filename == fileName
-                                           && t.UserId == userId
-                                           select t).FirstOrDefaultAsync() ?? throw new Exception("Token not found");
+      FileAccessTokenEntity? token = await (from t in context.FileAccessToken
+                                            where t.Filename == fileName
+                                            && t.UserId == userId
+                                            select t).FirstOrDefaultAsync();
 
       if (token != null)
       {
@@ -173,6 +175,38 @@ namespace AdvancedClipboard.Server.Repositories
       }
 
       return token;
+    }
+
+    public async Task<ClipboardGetData> PostFileInternal(IFormFile file, Guid userId, string? fileExtension, string? fileName, Guid? laneId)
+    {
+      DateTime now = DateTime.Now;
+      string extension = (fileExtension ?? Path.GetExtension(fileName) ?? Path.GetExtension(file.FileName));
+      string filename = $"clip_{now:yyyyMMdd'_'HHmmss}" + extension;
+      FileAccessTokenEntity token = await this.UploadInternal(filename,
+                                                              file.OpenReadStream(),
+                                                              userId,
+                                                              this.context,
+                                                              false);
+
+      Guid contentType = this.GetContentTypeForExtension(extension).StartsWith("image") ? ContentTypes.Image :
+                                                                                          ContentTypes.File;
+
+      ClipboardContentEntity entry = new ClipboardContentEntity()
+      {
+        ContentTypeId = contentType,
+        CreationDate = now,
+        LastUsedDate = now,
+        FileTokenId = token.Id,
+        UserId = userId,
+        DisplayFileName = fileName,
+        LaneId = laneId
+      };
+
+      await context.AddAsync(entry);
+      await context.SaveChangesAsync();
+
+      return contentType == ContentTypes.Image ? ClipboardGetData.CreateWithImageContent(entry.Id, entry.LaneId, token, fileName) :
+                                                 ClipboardGetData.CreateWithFileContent(entry.Id, entry.LaneId, token, fileName);
     }
 
     #endregion Methods

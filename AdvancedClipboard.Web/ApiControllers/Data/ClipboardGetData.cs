@@ -28,12 +28,12 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
 
     #region Methods
 
-    public static ClipboardGetData CreateWithFileContent(Guid id, Guid? laneId, FileAccessTokenEntity fileToken, string fileName)
+    public static ClipboardGetData CreateWithFileContent(Guid id, Guid? laneId, FileAccessTokenEntity fileToken, string? fileName)
     {
       return new ClipboardGetData(id) { FileContentUrl = FileTokenData.CreateUrl(fileToken), LaneId = laneId, ContentTypeId = ContentTypes.File, FileName = fileName };
     }
 
-    public static ClipboardGetData CreateWithImageContent(Guid id, Guid? laneId, FileAccessTokenEntity fileToken, string fileName)
+    public static ClipboardGetData CreateWithImageContent(Guid id, Guid? laneId, FileAccessTokenEntity fileToken, string? fileName)
     {
       return new ClipboardGetData(id) { FileContentUrl = FileTokenData.CreateUrl(fileToken), LaneId = laneId, ContentTypeId = ContentTypes.Image, FileName = fileName };
     }

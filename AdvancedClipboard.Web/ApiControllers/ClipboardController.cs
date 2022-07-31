@@ -75,13 +75,17 @@ namespace AdvancedClipboard.Web.ApiControllers
     [HttpPost("PostFile")]
     public async Task<ClipboardGetData> PostFile(IFormFile file, string fileExtension, Guid? laneId = null)
     {
-      return await this.PostFileInternal(file, fileExtension, null, laneId);
+      var userId = this.User.GetId();
+
+      return await this.fileRepository.PostFileInternal(file, userId, fileExtension, null, laneId);
     }
 
     [HttpPost("PostNamedFile")]
     public async Task<ClipboardGetData> PostNamedFile(IFormFile file, string fileName, Guid? laneId = null)
     {
-      return await this.PostFileInternal(file, null, fileName, laneId);
+      var userId = this.User.GetId();
+
+      return await this.fileRepository.PostFileInternal(file, userId, null, fileName, laneId);
     }
 
     [HttpPost("PostPlainText")]
@@ -100,40 +104,6 @@ namespace AdvancedClipboard.Web.ApiControllers
       await this.clipboardRepository.Put(data, userId);
 
       return this.Ok();
-    }
-
-    private async Task<ClipboardGetData> PostFileInternal(IFormFile file, string? fileExtension, string? fileName, Guid? laneId)
-    {
-      var userId = this.User.GetId();
-
-      DateTime now = DateTime.Now;
-      string extension = (fileExtension ?? Path.GetExtension(fileName) ?? Path.GetExtension(file.FileName));
-      string filename = $"clip_{now:yyyyMMdd'_'HHmmss}" + extension;
-      FileAccessTokenEntity token = await this.fileRepository.UploadInternal(filename,
-                                                                             file.OpenReadStream(),
-                                                                             userId,
-                                                                             this.context,
-                                                                             false);
-
-      Guid contentType = this.fileRepository.GetContentTypeForExtension(extension).StartsWith("image") ? ContentTypes.Image :
-                                                                                                   ContentTypes.File;
-
-      ClipboardContentEntity entry = new ClipboardContentEntity()
-      {
-        ContentTypeId = contentType,
-        CreationDate = now,
-        LastUsedDate = now,
-        FileTokenId = token.Id,
-        UserId = userId,
-        DisplayFileName = fileName,
-        LaneId = laneId
-      };
-
-      await context.AddAsync(entry);
-      await context.SaveChangesAsync();
-
-      return contentType == ContentTypes.Image ? ClipboardGetData.CreateWithImageContent(entry.Id, entry.LaneId, token, fileName) :
-                                                           ClipboardGetData.CreateWithFileContent(entry.Id, entry.LaneId, token, fileName);
     }
 
     #endregion Methods
