@@ -28,16 +28,6 @@
     form.submit();
   };
 
-  //var text_input_leave = function (field) {
-  //  var text = field.val();
-  //  text = $.trim(text);
-
-  //  var lines = text.split(/\r\n|\r|\n/).length;
-  //  field.attr("rows", Math.min(lines, 5));
-
-  //  field.val(text);
-  //};
-
   var update_preview = async function () {
     var text;
     try {
@@ -59,32 +49,6 @@
 
   var clipboardpreview = $(".clipboard-preview");
 
-  $("#paste-button").bind("mouseover", function () {
-    update_preview();
-  })
-
-  $("main").bind("mouseover", function () {
-    update_preview();
-  })
-
-  $(window).scroll(function () {
-    update_preview();
-  });
-
-  //$("#post-button").bind("mousedown", function () {
-  //  var form = $("#paste-form");
-  //  text_input_leave(form.find("#paste-field"));
-  //  form.submit();
-  //})
-
-  //$("#paste-field").focusout(async function () {
-  //  text_input_leave($(this));
-  //})
-
-  //$("#paste-field").focusin(function () {
-  //  $(this).attr("rows", 5);
-  //})
-
   $(".paste-button").click(async function () {
     var text = await navigator.clipboard.readText();
     paste_and_commit(text);
@@ -104,5 +68,7 @@
     });
   })
 
-  update_preview();
+  setInterval(function () {
+    update_preview();
+  }, 250)
 });
