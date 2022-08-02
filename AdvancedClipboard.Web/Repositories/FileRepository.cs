@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using AdvancedClipboard.Web;
 using AdvancedClipboard.Web.ApiControllers.Data;
 using AdvancedClipboard.Server.Constants;
+using AdvancedClipboard.Web.Util;
 
 namespace AdvancedClipboard.Server.Repositories
 {
@@ -20,19 +21,17 @@ namespace AdvancedClipboard.Server.Repositories
 
     private const string UserContainerPrefix = "user-";
 
-    private readonly Dictionary<string, string> mimeExtensions = new Dictionary<string, string>();
-
     ApplicationDbContext context;
     private readonly BlobServiceClient client;
+    private readonly MimeTypeResolver mimeTypeResolver;
 
     #region Constructors
 
-    public FileRepository(ApplicationDbContext context, BlobServiceClient client)
+    public FileRepository(ApplicationDbContext context, BlobServiceClient client, MimeTypeResolver mimeTypeResolver)
     {
       this.context = context;
       this.client = client;
-
-      this.InitializeMimeTypes(Resource.MimeTypes);
+      this.mimeTypeResolver = mimeTypeResolver;
     }
 
     #endregion Constructors
@@ -56,16 +55,6 @@ namespace AdvancedClipboard.Server.Repositories
       FileAccessTokenEntity newToken = await CreateToken(fileName, userId, context);
 
       return newToken;
-    }
-
-    /// <summary>
-    /// Retrives the corresponding content type for the file extension.
-    /// </summary>
-    /// <param name="extension">The file extension.</param>
-    /// <returns>The content type.</returns>
-    public string GetContentTypeForExtension(string extension)
-    {
-      return this.mimeExtensions[extension];
     }
 
     /// <summary>
@@ -95,7 +84,7 @@ namespace AdvancedClipboard.Server.Repositories
     /// <returns>The token data of the uploaded file.</returns>
     public async Task<FileAccessTokenEntity> UploadInternal(string filename, Stream content, Guid userId, ApplicationDbContext context, bool overwrite)
     {
-      GetContentTypeForExtension(Path.GetExtension(filename));
+      this.mimeTypeResolver.GetMimeType(Path.GetExtension(filename));
 
       FileAccessTokenEntity tokenEntity = await this.CreateTokenIfNotExists(filename, context, userId);
       BlobContainerClient azureContainer = await this.GetAzureContainer(userId);
@@ -136,31 +125,6 @@ namespace AdvancedClipboard.Server.Repositories
       return containerClient;
     }
 
-    private void InitializeMimeTypes(string mimeTypes)
-    {
-      string[] lines = mimeTypes.Split(System.Environment.NewLine);
-
-      foreach (string line in lines)
-      {
-        if (string.IsNullOrEmpty(line))
-        {
-          continue;
-        }
-
-        string[] lineparts = line.Split(',');
-
-        string mime = lineparts[0];
-        string extension = lineparts[1];
-        string extensionAlt = lineparts[2];
-
-        this.mimeExtensions.Add(extension, mime);
-
-        if (!string.IsNullOrEmpty(extensionAlt))
-        {
-          this.mimeExtensions.Add(extensionAlt, mime);
-        }
-      }
-    }
     private async Task<FileAccessTokenEntity> TryUpdateToken(ApplicationDbContext context, Guid userId, string fileName)
     {
       FileAccessTokenEntity? token = await (from t in context.FileAccessToken
@@ -188,8 +152,8 @@ namespace AdvancedClipboard.Server.Repositories
                                                               this.context,
                                                               false);
 
-      Guid contentType = this.GetContentTypeForExtension(extension).StartsWith("image") ? ContentTypes.Image :
-                                                                                          ContentTypes.File;
+      Guid contentType = this.mimeTypeResolver.GetMimeType(extension).StartsWith("image") ? ContentTypes.Image :
+                                                                                            ContentTypes.File;
 
       ClipboardContentEntity entry = new ClipboardContentEntity()
       {

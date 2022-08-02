@@ -1,13 +1,9 @@
 ﻿using AdvancedClipboard.Server.Repositories;
-using AdvancedClipboard.Web.Models.Identity;
+using AdvancedClipboard.Web.Util;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Globalization;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace AdvancedClipboard.Web.ApiControllers
 {
@@ -20,12 +16,14 @@ namespace AdvancedClipboard.Web.ApiControllers
   public class FileController : ControllerBase
   {
     private readonly FileRepository fileRepository;
+    private readonly MimeTypeResolver mimeTypeResolver;
 
     #region Constructors
 
-    public FileController(FileRepository fileRepository)
+    public FileController(FileRepository fileRepository, MimeTypeResolver mimeTypeResolver)
     {
       this.fileRepository = fileRepository;
+      this.mimeTypeResolver = mimeTypeResolver;
     }
 
     #endregion Constructors
@@ -48,7 +46,7 @@ namespace AdvancedClipboard.Web.ApiControllers
         throw new ArgumentException("Invalid Token.", nameof(token));
       }
 
-      string contentType = this.fileRepository.GetContentTypeForExtension(Path.GetExtension(filename));
+      string contentType = this.mimeTypeResolver.GetMimeType(Path.GetExtension(filename));
 
       BlobContainerClient azureContainer = await this.fileRepository.GetFile(actualToken, filename);
       BlobClient blob = azureContainer.GetBlobClient(filename);

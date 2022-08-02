@@ -18,6 +18,8 @@ namespace AdvancedClipboard.Web.Controllers.Model
 
     public LaneDetailsModel LaneData { get; set; } = new LaneDetailsModel();
 
-    public IFormFile? File { set; get; } 
+    public IFormFile? File { set; get; }
+
+    public string FileFilter { get; set; } = string.Empty;
   }
 }

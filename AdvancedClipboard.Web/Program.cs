@@ -18,6 +18,7 @@ builder.Services.AddAzureClients(builder => builder.AddBlobServiceClient(storage
 builder.Services.AddScoped<FileRepository>();
 builder.Services.AddScoped<ClipboardRepository>();
 builder.Services.AddScoped<LaneRepository>();
+builder.Services.AddScoped<MimeTypeResolver>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 var clientId = builder.Configuration.GetValue<string>("ClientId");

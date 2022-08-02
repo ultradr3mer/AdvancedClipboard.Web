@@ -21,21 +21,23 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
     public string FileContentUrl { get; private set; } = string.Empty;
     public Guid Id { get; }
     public string TextContent { get; private set; } = string.Empty;
-    public string FileName { get; private set; } = string.Empty;
+    public string DisplayName { get; private set; } = string.Empty;
+
+    public string MimeType { get; private set; } = string.Empty;
     public Guid? LaneId { get; set; }
 
     #endregion Properties
 
     #region Methods
 
-    public static ClipboardGetData CreateWithFileContent(Guid id, Guid? laneId, FileAccessTokenEntity fileToken, string? fileName)
+    public static ClipboardGetData CreateWithFileContent(Guid id, Guid? laneId, FileAccessTokenEntity fileToken, string? displayName)
     {
-      return new ClipboardGetData(id) { FileContentUrl = FileTokenData.CreateUrl(fileToken), LaneId = laneId, ContentTypeId = ContentTypes.File, FileName = fileName };
+      return new ClipboardGetData(id) { FileContentUrl = FileTokenData.CreateUrl(fileToken), LaneId = laneId, ContentTypeId = ContentTypes.File, DisplayName = displayName };
     }
 
-    public static ClipboardGetData CreateWithImageContent(Guid id, Guid? laneId, FileAccessTokenEntity fileToken, string? fileName)
+    public static ClipboardGetData CreateWithImageContent(Guid id, Guid? laneId, FileAccessTokenEntity fileToken, string? displayName)
     {
-      return new ClipboardGetData(id) { FileContentUrl = FileTokenData.CreateUrl(fileToken), LaneId = laneId, ContentTypeId = ContentTypes.Image, FileName = fileName };
+      return new ClipboardGetData(id) { FileContentUrl = FileTokenData.CreateUrl(fileToken), LaneId = laneId, ContentTypeId = ContentTypes.Image, DisplayName = displayName };
     }
 
     public static ClipboardGetData CreateWithPlainTextContent(Guid id, Guid? laneId, string text)
