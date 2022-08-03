@@ -1,4 +1,5 @@
-﻿using AdvancedClipboard.Web.Controllers.Model;
+﻿using AdvancedClipboard.Web.ApiControllers.Data;
+using AdvancedClipboard.Web.Controllers.Model;
 using AdvancedClipboard.Web.Extensions;
 using AdvancedClipboard.Web.Models;
 using AdvancedClipboard.Web.Repositories;
@@ -21,12 +22,14 @@ namespace AdvancedClipboard.Web.Controllers
       this.mimeTypeResolver = mimeTypeResolver;
     }
 
-    [HttpGet("Lane")]
-    public async Task<IActionResult> Lane(Guid laneid)
+    [HttpGet(nameof(Lane))]
+    public async Task<IActionResult> Lane(Guid laneid, string? searchText)
     {
       var userId = this.User.GetId();
 
       var data = await this.repository.GetLaneWithContextAsync(laneid, userId);
+
+      ApplySerachFilter(searchText, data);
 
       var model = new HomeIndexModel()
       {
@@ -39,11 +42,14 @@ namespace AdvancedClipboard.Web.Controllers
       return View(nameof(Index), model);
     }
 
-    public async Task<IActionResult> Index()
+    [HttpGet()]
+    public async Task<IActionResult> Index(string? searchText)
     {
       var userId = this.User.GetId();
 
       var data = await this.repository.GetWithContextAsync(null, userId);
+
+      ApplySerachFilter(searchText, data);
 
       var model = new HomeIndexModel()
       {
@@ -65,6 +71,15 @@ namespace AdvancedClipboard.Web.Controllers
     public IActionResult Error()
     {
       return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    private static void ApplySerachFilter(string? searchText, ClipboardContainerGetData data)
+    {
+      if (searchText != null)
+      {
+        data.Entries = data.Entries.Where(o => o.TextContent?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true
+                                          || o.DisplayName?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
+      }
     }
   }
 }

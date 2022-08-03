@@ -21,5 +21,7 @@ namespace AdvancedClipboard.Web.Controllers.Model
     public IFormFile? File { set; get; }
 
     public string FileFilter { get; set; } = string.Empty;
+
+    public string SearchText { get; set; } = string.Empty;
   }
 }
