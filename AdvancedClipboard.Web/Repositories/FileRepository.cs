@@ -125,7 +125,7 @@ namespace AdvancedClipboard.Server.Repositories
       return containerClient;
     }
 
-    private async Task<FileAccessTokenEntity> TryUpdateToken(ApplicationDbContext context, Guid userId, string fileName)
+    private async Task<FileAccessTokenEntity?> TryUpdateToken(ApplicationDbContext context, Guid userId, string fileName)
     {
       FileAccessTokenEntity? token = await (from t in context.FileAccessToken
                                             where t.Filename == fileName
@@ -169,8 +169,8 @@ namespace AdvancedClipboard.Server.Repositories
       await context.AddAsync(entry);
       await context.SaveChangesAsync();
 
-      return contentType == ContentTypes.Image ? ClipboardGetData.CreateWithImageContent(entry.Id, entry.LaneId, token, fileName) :
-                                                 ClipboardGetData.CreateWithFileContent(entry.Id, entry.LaneId, token, fileName);
+      return contentType == ContentTypes.Image ? ClipboardGetData.CreateWithImageContent(entry, token) :
+                                                 ClipboardGetData.CreateWithFileContent(entry, token);
     }
 
     #endregion Methods

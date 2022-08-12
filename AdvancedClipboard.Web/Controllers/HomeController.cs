@@ -31,13 +31,26 @@ namespace AdvancedClipboard.Web.Controllers
 
       ApplySerachFilter(searchText, data);
 
+      var pinned = new List<ClipboardGetData>();
+      var entries = new List<ClipboardGetData>();
+      foreach (var entry in data.Entries)
+      {
+        var target = entry.IsPinned ? pinned : entries;
+        target.Add(entry);
+      }
+
+      string fullPath = this.Request.Path + this.Request.QueryString;
+
       var model = new HomeIndexModel()
       {
         Lanes = data.Lanes.Select(o => new LaneDisplayData(o)).ToList(),
-        Entries = data.Entries,
+        Pinned = pinned,
+        Entries = entries,
         CurrentLaneId = laneid,
-        FileFilter = string.Join(", ", mimeTypeResolver.GetAllExtensions())
+        FileFilter = string.Join(", ", mimeTypeResolver.GetAllExtensions()),
+        FullPath = fullPath
       };
+      model.Initialize();
 
       return View(nameof(Index), model);
     }
@@ -51,12 +64,25 @@ namespace AdvancedClipboard.Web.Controllers
 
       ApplySerachFilter(searchText, data);
 
+      var pinned = new List<ClipboardGetData>();
+      var entries = new List<ClipboardGetData>();
+      foreach (var entry in data.Entries)
+      {
+        var target = entry.IsPinned ? pinned : entries;
+        target.Add(entry);
+      }
+
+      string fullPath = this.Request.Path + this.Request.QueryString;
+
       var model = new HomeIndexModel()
       {
         Lanes = data.Lanes.Select(o => new LaneDisplayData(o)).ToList(),
-        Entries = data.Entries,
-        FileFilter = string.Join(", ", mimeTypeResolver.GetAllExtensions())
+        Pinned = pinned,
+        Entries = entries,
+        FileFilter = string.Join(", ", mimeTypeResolver.GetAllExtensions()),
+        FullPath = fullPath
       };
+      model.Initialize();
 
       return View(model);
     }

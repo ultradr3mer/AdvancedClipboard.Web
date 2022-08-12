@@ -25,10 +25,13 @@ namespace AdvancedClipboard.Web.Repositories
                                               && (cc.Id == id || id == null)
                                               select new
                                               {
-                                                data = ClipboardGetData.CreateFromEntity(cc, cc.FileToken),
+                                                cc = cc,
+                                                token = cc.FileToken,
                                                 date = cc.CreationDate
                                               })
-                                             .OrderByDescending(o => o.date).Select(o => o.data).ToListAsync();
+                                             .OrderByDescending(o => o.date)
+                                             .Select(o => ClipboardGetData.CreateFromEntity(o.cc, o.cc.FileToken))
+                                             .ToListAsync();
 
       List<LaneGetData> lanes = await this.laneRepository.GetLanesForUser(userId, null);
 
@@ -57,7 +60,7 @@ namespace AdvancedClipboard.Web.Repositories
       await this.context.AddAsync(entry);
       await this.context.SaveChangesAsync();
 
-      return ClipboardGetData.CreateWithPlainTextContent(entry.Id, entry.LaneId, entry.TextContent);
+      return ClipboardGetData.CreateWithPlainTextContent(entry);
     }
 
     internal async Task<ClipboardContainerGetData> GetLaneWithContextAsync(Guid lane, Guid userId)
@@ -68,10 +71,14 @@ namespace AdvancedClipboard.Web.Repositories
                                               && cc.LaneId == lane
                                               select new
                                               {
-                                                data = ClipboardGetData.CreateFromEntity(cc, cc.FileToken),
+                                                cc = cc,
+                                                token = cc.FileToken,
                                                 date = cc.CreationDate
                                               })
-                                              .OrderByDescending(o => o.date).Select(o => o.data).ToListAsync();
+                                             .OrderByDescending(o => o.date)
+                                             .Select(o => ClipboardGetData.CreateFromEntity(o.cc, o.cc.FileToken))
+                                             .ToListAsync();
+
 
       List<LaneGetData> lanes = await this.laneRepository.GetLanesForUser(userId, null);
 
@@ -112,5 +119,32 @@ namespace AdvancedClipboard.Web.Repositories
       await context.SaveChangesAsync();
     }
 
+    internal async Task Pin(Guid id, Guid userId)
+    {
+      var cc = await context.ClipboardContent.FindAsync(id) ?? throw new Exception("Item Not Found.");
+
+      if (cc.UserId != userId)
+      {
+        throw new Exception("Item Not Found.");
+      }
+
+      cc.IsPinned = true;
+
+      await context.SaveChangesAsync();
+    }
+
+    internal async Task Unpin(Guid id, Guid userId)
+    {
+      var cc = await context.ClipboardContent.FindAsync(id) ?? throw new Exception("Item Not Found.");
+
+      if (cc.UserId != userId)
+      {
+        throw new Exception("Item Not Found.");
+      }
+
+      cc.IsPinned = false;
+
+      await context.SaveChangesAsync();
+    }
   }
 }

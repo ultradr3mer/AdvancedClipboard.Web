@@ -3,20 +3,6 @@
 @using AdvancedClipboard.Web.Util
 @{
   ViewData["Title"] = "Advanced Clipboard";
-
-  var laneColors = Model.Lanes.ToDictionary(o => o.Id, o => o.Color);
-  laneColors.Add(Guid.Empty, "transparent");
-
-  string laneStyle = $"background-color: #303030;";
-  string title = "Lanes";
-  if (Model.CurrentLaneId != null)
-  {
-    var lane = Model.Lanes.Single(o => o.Id == Model.CurrentLaneId);
-    laneStyle = $"background-color: {lane.Color}55; border-bottom: .45em solid {lane.Color};";
-    title = lane.Name;
-  }
-
-  string fullPath = Context.Request.Path + Context.Request.QueryString;
 }
 @model HomeIndexModel
 
@@ -24,22 +10,22 @@
 {
   <div class="row">
     <div class="col-12 pb-3">
-      <div class="card text-white clipboard-card" style="@laneStyle">
+      <div class="card text-white clipboard-card" style="@Model.LaneStyle">
         <div class="card-header lane-card-header">
           <div class="container ps-3 pe-3">
             <div class="row">
               <div class="col-auto ps-0 pb-1">
                 <h3 class="me-0">
-                  @title
+                  @Model.Title
                   @if (Model.CurrentLaneId != null)
                   {
-                    <a class="btn" asp-controller="Lane" asp-action="edit" asp-route-id="@Model.CurrentLaneId" asp-route-returnurl="@fullPath"><i class="bi bi-pen"></i></a>
+                    <a class="btn" asp-controller="Lane" asp-action="edit" asp-route-id="@Model.CurrentLaneId" asp-route-returnurl="@Model?.FullPath"><i class="bi bi-pen"></i></a>
                   }
                 </h3>
               </div>
               <div class="col-12 col-md pe-0 pb-1">
                 <form class="from-inline float-end" method="post">
-                  <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="@fullPath">
+                  <input id="ReturnUrl" name="ReturnUrl" type="hidden" value="@Model?.FullPath">
                   <div asp-validation-summary="All" class="text-danger"></div>
                   <div class="input-group">
                     <input class="form-control bg-dark border-0 text-white" id="Name" name="Name" width="200" placeholder="Add lane" type="text" value="">
@@ -52,11 +38,11 @@
           </div>
         </div>
         <div class="card-body lane-card-body">
-          @if (Model.CurrentLaneId != null)
+          @if (Model?.CurrentLaneId != null)
           {
             <a class="btn m-1 bg-medium rounded-right show-all-button" asp-controller="home" asp-action="index"><i class="bi bi-arrow-left me-2"></i>Show all</a>
           }
-          @foreach (var lane in Model.Lanes)
+          @foreach (var lane in Model!.Lanes)
           {
             <a class="btn m-1 lane-button" style="background-color: @lane.Color ; color: @lane.TextColor ;" asp-controller="home" asp-action="lane" asp-route-laneid="@lane.Id">@lane.Name</a>
           }
@@ -70,7 +56,7 @@
     <div class="accordion" id="accordionAdd">
       @using (Html.BeginForm(string.Empty, "Details", FormMethod.Post, new { id = "paste-form" }))
       {
-        @Html.Hidden(nameof(DetailsModel.ReturnUrl), fullPath)
+        @Html.Hidden(nameof(DetailsModel.ReturnUrl), Model?.FullPath)
         @Html.Hidden(nameof(DetailsModel.LaneId), Model?.CurrentLaneId)
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingOne">
@@ -105,7 +91,7 @@
       }
       @using (Html.BeginForm("PostFile", "Details", FormMethod.Post, new { id = "upload-form", enctype = "multipart/form-data" }))
       {
-        @Html.Hidden(nameof(DetailsModel.ReturnUrl), fullPath)
+        @Html.Hidden(nameof(DetailsModel.ReturnUrl), Model?.FullPath)
         @Html.Hidden(nameof(DetailsModel.LaneId), Model?.CurrentLaneId)
         <div class="accordion-item">
           <h2 class="accordion-header" id="headingThree">
@@ -148,77 +134,22 @@
     </div>
   </div>
 </div>
+@if (Model!.Pinned.Count > 0)
+{
+  <div class="row pt-3">
+    @foreach (var entry in Model!.Pinned)
+    {
+      var sub = new ClipboardCardModel() { IndexModel = Model, Entry = entry };
+      <partial name="ClipboardCard" model="@sub" />
+    }
+  </div>
+  <hr />
+}
 <div class="row pt-3 pb-3">
   @foreach (var entry in Model!.Entries)
   {
-    <div class="col-12 col-md-6 col-lg-3 pb-3">
-      <div class="card text-white bg-medium hadow-sm clipboard-card" style="border-left: .3em solid @laneColors[entry.LaneId ?? Guid.Empty] ;">
-        <div class="card-header p-0">
-          <form method="post">
-            <input name="id" type="hidden" value="@entry.Id">
-            <input name="returnurl" type="hidden" value="@fullPath">
-            <div class="btn-group btn-group-sm float-end m-1" role="group">
-              <button type="button" class="btn btn-light expand-clipboard"><i class="bi bi-arrows-angle-expand"></i></button>
-              <a class="btn btn-light"
-               role="button" asp-area=""
-               asp-controller="Details"
-               asp-action="index"
-               asp-route-id="@entry.Id"
-               asp-route-returnurl="@fullPath">
-                <i class="bi bi-pen"></i>
-              </a>
-              <button class="btn btn-light"
-                    role="button" asp-area=""
-                    asp-controller="Details"
-                    asp-action="delete">
-                <i class="bi bi-x-lg"></i>
-              </button>
-            </div>
-          </form>
-        </div>
-        <div class="card-body clipboard-card-body">
-          @if (entry.ContentTypeId == ContentTypes.PlainText)
-          {
-            <span class="clipboard-text">
-              <span class="card-text">@UrlParser.ConvertToHtmlWithLinks(entry.TextContent)</span>
-              <pre class="d-none card-data">@entry.TextContent</pre>
-            </span>
-          }
-          else if (entry.ContentTypeId == ContentTypes.Image)
-          {
-            <img class="clipboard-image" src="~/api/file/@entry.FileContentUrl" />
-          }
-          else if (entry.ContentTypeId == ContentTypes.File)
-          {
-            <h2 class="text-center">
-              @if (string.Compare(System.IO.Path.GetExtension(@entry.DisplayName), ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
-              {
-                <i class="bi bi-file-pdf"></i>
-              }
-              else if (string.Compare(System.IO.Path.GetExtension(@entry.DisplayName), ".zip", StringComparison.OrdinalIgnoreCase) == 0 ||
-              string.Compare(System.IO.Path.GetExtension(@entry.DisplayName), ".7z", StringComparison.OrdinalIgnoreCase) == 0 ||
-              string.Compare(System.IO.Path.GetExtension(@entry.DisplayName), ".rar", StringComparison.OrdinalIgnoreCase) == 0)
-              {
-                <i class="bi bi-folder"></i>
-              }
-            </h2>
-            <h4 class="text-center">@entry.DisplayName</h4>
-          }
-        </div>
-        @if (entry.ContentTypeId == ContentTypes.File)
-        {
-          <div class="card-footer p-0">
-            <div class="float-end m-1" role="group">
-              <a class="btn btn-secondary" href="~/api/file/@entry.FileContentUrl" role="button">
-                <i class="bi bi-arrow-up-square"></i>
-                <span class="ms-1">View</span>
-              </a>
-              <a class="btn btn-primary text-white" href="~/api/file/@entry.FileContentUrl" role="button" download="@entry.DisplayName"><i class="bi bi-download"></i><span class="ms-1">Download</span></a>
-            </div>
-          </div>
-        }
-      </div>
-    </div>
+    var sub = new ClipboardCardModel() { IndexModel = Model, Entry = entry };
+    <partial name="ClipboardCard" model="@sub" />
   }
 </div>
 

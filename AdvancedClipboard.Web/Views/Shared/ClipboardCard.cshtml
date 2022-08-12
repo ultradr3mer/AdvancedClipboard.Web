@@ -1,0 +1,78 @@
+﻿@using AdvancedClipboard.Server.Constants
+@using AdvancedClipboard.Web.Controllers.Model
+@using AdvancedClipboard.Web.Util
+@model ClipboardCardModel
+<div class="col-12 col-md-6 col-lg-3 pb-3">
+  <div class="card text-white bg-medium hadow-sm clipboard-card" style="border-left: .3em solid @Model.IndexModel.LaneColors[Model.Entry.LaneId ?? Guid.Empty] ;">
+    <div class="card-header p-0">
+      <form method="post">
+        <input name="id" type="hidden" value="@Model.Entry.Id">
+        <input name="returnurl" type="hidden" value="@Model.IndexModel?.FullPath">
+        <div class="btn-group btn-group-sm float-end m-1" role="group">
+          <button type="button" class="btn btn-light expand-clipboard"><i class="bi bi-arrows-angle-expand"></i></button>
+          <button class="btn btn-light"
+                  role="button" asp-area=""
+                  asp-controller="Details"
+                  asp-action="@(Model.Entry.IsPinned ? "Unpin" : "Pin")">
+            <i class="bi bi-pin-angle"></i>
+          </button>
+          <a class="btn btn-light"
+             role="button" asp-area=""
+             asp-controller="Details"
+             asp-action="index"
+             asp-route-id="@Model.Entry.Id"
+             asp-route-returnurl="@Model.IndexModel?.FullPath">
+            <i class="bi bi-pen"></i>
+          </a>
+          <button class="btn btn-light"
+                  role="button" asp-area=""
+                  asp-controller="Details"
+                  asp-action="Archive">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="card-body clipboard-card-body">
+      @if (Model.Entry.ContentTypeId == ContentTypes.PlainText)
+      {
+        <span class="clipboard-text">
+          <span class="card-text">@UrlParser.ConvertToHtmlWithLinks(Model.Entry.TextContent)</span>
+          <pre class="d-none card-data">@Model.Entry.TextContent</pre>
+        </span>
+      }
+      else if (Model.Entry.ContentTypeId == ContentTypes.Image)
+      {
+        <img class="clipboard-image" src="~/api/file/@Model.Entry.FileContentUrl" />
+      }
+      else if (Model.Entry.ContentTypeId == ContentTypes.File)
+      {
+        <h2 class="text-center">
+          @if (string.Compare(System.IO.Path.GetExtension(@Model.Entry.DisplayName), ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
+          {
+            <i class="bi bi-file-pdf"></i>
+          }
+          else if (string.Compare(System.IO.Path.GetExtension(@Model.Entry.DisplayName), ".zip", StringComparison.OrdinalIgnoreCase) == 0 ||
+          string.Compare(System.IO.Path.GetExtension(@Model.Entry.DisplayName), ".7z", StringComparison.OrdinalIgnoreCase) == 0 ||
+          string.Compare(System.IO.Path.GetExtension(@Model.Entry.DisplayName), ".rar", StringComparison.OrdinalIgnoreCase) == 0)
+          {
+            <i class="bi bi-folder"></i>
+          }
+        </h2>
+        <h4 class="text-center">@Model.Entry.DisplayName</h4>
+      }
+    </div>
+    @if (Model.Entry.ContentTypeId == ContentTypes.File)
+    {
+      <div class="card-footer p-0">
+        <div class="float-end m-1" role="group">
+          <a class="btn btn-secondary" href="~/api/file/@Model.Entry.FileContentUrl" role="button">
+            <i class="bi bi-arrow-up-square"></i>
+            <span class="ms-1">View</span>
+          </a>
+          <a class="btn btn-primary text-white" href="~/api/file/@Model.Entry.FileContentUrl" role="button" download="@Model.Entry.DisplayName"><i class="bi bi-download"></i><span class="ms-1">Download</span></a>
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -68,8 +68,8 @@ namespace AdvancedClipboard.Web.Controllers
       return LocalRedirect(model.ReturnUrl);
     }
 
-    [HttpPost(nameof(Delete))]
-    public async Task<IActionResult> Delete(DetailsModel model)
+    [HttpPost(nameof(Archive))]
+    public async Task<IActionResult> Archive(DetailsModel model)
     {
       var userId = this.User.GetId();
 
@@ -87,5 +87,26 @@ namespace AdvancedClipboard.Web.Controllers
 
       return LocalRedirect(returnurl);
     }
+
+    [HttpPost(nameof(Pin))]
+    public async Task<IActionResult> Pin(DetailsModel model)
+    {
+      var userId = this.User.GetId();
+
+      await this.repository.Pin(model.Id, userId);
+
+      return LocalRedirect(model.ReturnUrl);
+    }
+
+    [HttpPost(nameof(Unpin))]
+    public async Task<IActionResult> Unpin(DetailsModel model)
+    {
+      var userId = this.User.GetId();
+
+      await this.repository.Unpin(model.Id, userId);
+
+      return LocalRedirect(model.ReturnUrl);
+    }
+
   }
 }

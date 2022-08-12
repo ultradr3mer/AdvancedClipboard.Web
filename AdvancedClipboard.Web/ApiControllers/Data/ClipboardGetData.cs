@@ -8,9 +8,8 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
   {
     #region Constructors
 
-    private ClipboardGetData(Guid id)
+    public ClipboardGetData()
     {
-      Id = id;
     }
 
     #endregion Constructors
@@ -19,30 +18,52 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
 
     public Guid ContentTypeId { get; private set; }
     public string FileContentUrl { get; private set; } = string.Empty;
-    public Guid Id { get; }
+    public Guid Id { get; private set; }
     public string TextContent { get; private set; } = string.Empty;
     public string DisplayName { get; private set; } = string.Empty;
 
     public string MimeType { get; private set; } = string.Empty;
-    public Guid? LaneId { get; set; }
+    public Guid? LaneId { get; private set; }
+    public bool IsPinned { get; private set; }
 
     #endregion Properties
 
     #region Methods
 
-    public static ClipboardGetData CreateWithFileContent(Guid id, Guid? laneId, FileAccessTokenEntity fileToken, string? displayName)
+    public static ClipboardGetData CreateWithFileContent(ClipboardContentEntity cc, FileAccessTokenEntity fileToken)
     {
-      return new ClipboardGetData(id) { FileContentUrl = FileTokenData.CreateUrl(fileToken), LaneId = laneId, ContentTypeId = ContentTypes.File, DisplayName = displayName };
+      var result = CreateBase(cc);
+      result.FileContentUrl = FileTokenData.CreateUrl(fileToken);
+      result.ContentTypeId = ContentTypes.File;
+      result.DisplayName = cc.DisplayFileName!;
+      return result;
     }
 
-    public static ClipboardGetData CreateWithImageContent(Guid id, Guid? laneId, FileAccessTokenEntity fileToken, string? displayName)
+    private static ClipboardGetData CreateBase(ClipboardContentEntity cc)
     {
-      return new ClipboardGetData(id) { FileContentUrl = FileTokenData.CreateUrl(fileToken), LaneId = laneId, ContentTypeId = ContentTypes.Image, DisplayName = displayName };
+      return new ClipboardGetData()
+      {
+        Id = cc.Id,
+        LaneId = cc.LaneId,
+        IsPinned = cc.IsPinned
+      };
     }
 
-    public static ClipboardGetData CreateWithPlainTextContent(Guid id, Guid? laneId, string text)
+    public static ClipboardGetData CreateWithImageContent(ClipboardContentEntity cc, FileAccessTokenEntity fileToken)
     {
-      return new ClipboardGetData(id) { TextContent = text, LaneId = laneId, ContentTypeId = ContentTypes.PlainText, };
+      var result = CreateBase(cc);
+      result.FileContentUrl = FileTokenData.CreateUrl(fileToken);
+      result.ContentTypeId = ContentTypes.Image;
+      result.DisplayName = cc.DisplayFileName!;
+      return result;
+    }
+
+    public static ClipboardGetData CreateWithPlainTextContent(ClipboardContentEntity cc)
+    {
+      var result = CreateBase(cc);
+      result.ContentTypeId = ContentTypes.PlainText;
+      result.TextContent = cc.TextContent!;
+      return result;
     }
 
     internal static ClipboardGetData CreateFromEntity(ClipboardContentEntity cc, FileAccessTokenEntity? fileToken)
@@ -51,15 +72,15 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
 
       if (contentType == ContentTypes.Image)
       {
-        return CreateWithImageContent(cc.Id, cc.LaneId, fileToken!, cc.DisplayFileName!);
+        return CreateWithImageContent(cc, fileToken!);
       }
       else if (contentType == ContentTypes.PlainText)
       {
-        return CreateWithPlainTextContent(cc.Id, cc.LaneId, cc.TextContent!);
+        return CreateWithPlainTextContent(cc);
       }
       else if (contentType == ContentTypes.File)
       {
-        return CreateWithFileContent(cc.Id, cc.LaneId, fileToken!, cc.DisplayFileName!);
+        return CreateWithFileContent(cc, fileToken!);
       }
 
       throw new Exception("Unexpected Content Type");
