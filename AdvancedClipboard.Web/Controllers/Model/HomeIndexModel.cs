@@ -32,7 +32,7 @@ namespace AdvancedClipboard.Web.Controllers.Model
 
     internal void Initialize()
     {
-      this.LaneColors = this.Lanes.ToDictionary(o => o.Id, o => o.Color);
+      this.LaneColors = this.Lanes.Where(o => o.Id != null).ToDictionary(o => o.Id!.Value, o => o.Color);
       this.LaneColors.Add(Guid.Empty, "transparent");
 
       this.LaneStyle = $"background-color: #303030;";

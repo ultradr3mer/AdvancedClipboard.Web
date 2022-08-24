@@ -58,12 +58,18 @@ namespace AdvancedClipboard.Web.Controllers
         throw new Exception("Text must not be empty.");
       }
 
-      HttpContext.Items.TryGetValue("returnurl", out object? test);
-
       var userId = this.User.GetId();
 
-      var apiData = new ClipboardPostPlainTextData() { Content = model.TextContent, LaneGuid = model.LaneId };
-      await this.repository.PostPlainTextAsync(userId, apiData);
+      if (model.Id == Guid.Empty)
+      {
+        var apiData = new ClipboardPostPlainTextData() { Content = model.TextContent, LaneGuid = model.LaneId };
+        await this.repository.PostPlainTextAsync(userId, apiData);
+      }
+      else
+      {
+        var apiData = TypeAdapter.Adapt<ClipboardPutData>(model);
+        await this.repository.Put(apiData, userId);
+      }
 
       return LocalRedirect(model.ReturnUrl);
     }
