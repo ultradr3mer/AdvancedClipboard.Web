@@ -104,7 +104,7 @@ namespace AdvancedClipboard.Web.Controllers
       if (searchText != null)
       {
         data.Entries = data.Entries.Where(o => o.TextContent?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true
-                                          || o.DisplayName?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                                          || o.FileName?.Contains(searchText, StringComparison.OrdinalIgnoreCase) == true).ToList();
       }
     }
   }

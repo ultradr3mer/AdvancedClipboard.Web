@@ -20,7 +20,7 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
     public string FileContentUrl { get; private set; } = string.Empty;
     public Guid Id { get; private set; }
     public string TextContent { get; private set; } = string.Empty;
-    public string DisplayName { get; private set; } = string.Empty;
+    public string FileName { get; private set; } = string.Empty;
 
     public string MimeType { get; private set; } = string.Empty;
     public Guid? LaneId { get; private set; }
@@ -35,7 +35,7 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
       var result = CreateBase(cc);
       result.FileContentUrl = FileTokenData.CreateUrl(fileToken);
       result.ContentTypeId = ContentTypes.File;
-      result.DisplayName = cc.DisplayFileName!;
+      result.FileName = cc.DisplayFileName!;
       return result;
     }
 
@@ -54,7 +54,7 @@ namespace AdvancedClipboard.Web.ApiControllers.Data
       var result = CreateBase(cc);
       result.FileContentUrl = FileTokenData.CreateUrl(fileToken);
       result.ContentTypeId = ContentTypes.Image;
-      result.DisplayName = cc.DisplayFileName!;
+      result.FileName = cc.DisplayFileName!;
       return result;
     }
 

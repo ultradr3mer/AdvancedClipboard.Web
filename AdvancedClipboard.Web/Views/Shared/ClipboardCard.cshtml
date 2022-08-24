@@ -16,14 +16,32 @@
                   asp-action="@(Model.Entry.IsPinned ? "Unpin" : "Pin")">
             <i class="bi bi-pin-angle"></i>
           </button>
-          <a class="btn btn-light"
+          @if (Model.Entry.ContentTypeId == ContentTypes.PlainText)
+          {
+            <a class="btn btn-light"
              role="button" asp-area=""
              asp-controller="Details"
              asp-action="index"
              asp-route-id="@Model.Entry.Id"
              asp-route-returnurl="@Model.IndexModel?.FullPath">
-            <i class="bi bi-pen"></i>
-          </a>
+              <i class="bi bi-pen"></i>
+            </a>
+          }
+          else if (Model.Entry.ContentTypeId == ContentTypes.Image)
+          {
+
+          }
+          else if (Model.Entry.ContentTypeId == ContentTypes.File)
+          {
+            <a class="btn btn-light"
+             role="button" asp-area=""
+             asp-controller="Details"
+             asp-action="File"
+             asp-route-id="@Model.Entry.Id"
+             asp-route-returnurl="@Model.IndexModel?.FullPath">
+              <i class="bi bi-pen"></i>
+            </a>
+          }
           <button class="btn btn-light"
                   role="button" asp-area=""
                   asp-controller="Details"
@@ -48,18 +66,18 @@
       else if (Model.Entry.ContentTypeId == ContentTypes.File)
       {
         <h2 class="text-center">
-          @if (string.Compare(System.IO.Path.GetExtension(@Model.Entry.DisplayName), ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
+          @if (string.Compare(System.IO.Path.GetExtension(@Model.Entry.FileName), ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
           {
             <i class="bi bi-file-pdf"></i>
           }
-          else if (string.Compare(System.IO.Path.GetExtension(@Model.Entry.DisplayName), ".zip", StringComparison.OrdinalIgnoreCase) == 0 ||
-          string.Compare(System.IO.Path.GetExtension(@Model.Entry.DisplayName), ".7z", StringComparison.OrdinalIgnoreCase) == 0 ||
-          string.Compare(System.IO.Path.GetExtension(@Model.Entry.DisplayName), ".rar", StringComparison.OrdinalIgnoreCase) == 0)
+          else if (string.Compare(System.IO.Path.GetExtension(@Model.Entry.FileName), ".zip", StringComparison.OrdinalIgnoreCase) == 0 ||
+          string.Compare(System.IO.Path.GetExtension(@Model.Entry.FileName), ".7z", StringComparison.OrdinalIgnoreCase) == 0 ||
+          string.Compare(System.IO.Path.GetExtension(@Model.Entry.FileName), ".rar", StringComparison.OrdinalIgnoreCase) == 0)
           {
             <i class="bi bi-folder"></i>
           }
         </h2>
-        <h4 class="text-center">@Model.Entry.DisplayName</h4>
+        <h4 class="text-center">@Model.Entry.FileName</h4>
       }
     </div>
     @if (Model.Entry.ContentTypeId == ContentTypes.File)
@@ -70,7 +88,7 @@
             <i class="bi bi-arrow-up-square"></i>
             <span class="ms-1">View</span>
           </a>
-          <a class="btn btn-primary text-white" href="~/api/file/@Model.Entry.FileContentUrl" role="button" download="@Model.Entry.DisplayName"><i class="bi bi-download"></i><span class="ms-1">Download</span></a>
+          <a class="btn btn-primary text-white" href="~/api/file/@Model.Entry.FileContentUrl" role="button" download="@Model.Entry.FileName"><i class="bi bi-download"></i><span class="ms-1">Download</span></a>
         </div>
       </div>
     }

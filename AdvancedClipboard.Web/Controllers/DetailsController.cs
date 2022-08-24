@@ -39,6 +39,20 @@ namespace AdvancedClipboard.Web.Controllers
       return View(model);
     }
 
+    [HttpGet(nameof(File))]
+    public async Task<IActionResult> File(Guid id, string returnurl)
+    {
+      var userId = this.User.GetId();
+
+      var data = await this.repository.GetWithContextAsync(id, userId);
+
+      var model = TypeAdapter.Adapt<DetailsModel>(data.Entries.Single());
+      model.Lanes = new SelectList(new[] { new LaneGetData() }.Concat(data.Lanes), "Id", "Name");
+      model.ReturnUrl = returnurl;
+
+      return View(model);
+    }
+
     [HttpPost(nameof(Put))]
     public async Task<IActionResult> Put(DetailsModel model)
     {
@@ -53,23 +67,15 @@ namespace AdvancedClipboard.Web.Controllers
     [HttpPost]
     public async Task<IActionResult> Post(DetailsModel model)
     {
-      if(string.IsNullOrEmpty(model.TextContent))
+      if (string.IsNullOrEmpty(model.TextContent))
       {
         throw new Exception("Text must not be empty.");
       }
 
       var userId = this.User.GetId();
 
-      if (model.Id == Guid.Empty)
-      {
-        var apiData = new ClipboardPostPlainTextData() { Content = model.TextContent, LaneGuid = model.LaneId };
-        await this.repository.PostPlainTextAsync(userId, apiData);
-      }
-      else
-      {
-        var apiData = TypeAdapter.Adapt<ClipboardPutData>(model);
-        await this.repository.Put(apiData, userId);
-      }
+      var apiData = new ClipboardPostPlainTextData() { Content = model.TextContent, LaneGuid = model.LaneId };
+      await this.repository.PostPlainTextAsync(userId, apiData);
 
       return LocalRedirect(model.ReturnUrl);
     }
