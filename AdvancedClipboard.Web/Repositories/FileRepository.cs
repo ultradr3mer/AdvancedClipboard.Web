@@ -58,12 +58,12 @@ namespace AdvancedClipboard.Server.Repositories
     }
 
     /// <summary>
-    /// Gets the file coresponding to the token and filename.
+    /// Gets the container coresponding to the token and filename.
     /// </summary>
     /// <param name="token">The token.</param>
     /// <param name="filename">The filename.</param>
     /// <returns>The container.</returns>
-    public async Task<BlobContainerClient> GetFile(long token, string filename)
+    public async Task<BlobContainerClient> GetAzureContainer(long token, string filename)
     {
       Guid id = await (from t in context.FileAccessToken
                        join u in context.Users on t.UserId equals u.Id
@@ -71,7 +71,24 @@ namespace AdvancedClipboard.Server.Repositories
                        && t.Filename == filename
                        select (Guid?)u.Id).FirstOrDefaultAsync() ?? throw new Exception("File not Found");
 
-      return await this.GetAzureContainer(id);
+      return await this.GetAzureContainerInternal(id);
+    }
+
+    /// <summary>
+    /// Gets the container coresponding to the token and filename.
+    /// </summary>
+    /// <param name="token">The token.</param>
+    /// <param name="filename">The filename.</param>
+    /// <returns>The container.</returns>
+    public async Task<(BlobContainerClient container, BlobContainerClient thumbsContainer)> GetAzureContainerPair(long token, string filename)
+    {
+      Guid id = await (from t in context.FileAccessToken
+                       join u in context.Users on t.UserId equals u.Id
+                       where t.Token == token
+                       && t.Filename == filename
+                       select (Guid?)u.Id).FirstOrDefaultAsync() ?? throw new Exception("File not Found");
+
+      return  (await this.GetAzureContainerInternal(id), await this.GetAzureThumbsContainerInternal(id));
     }
 
     /// <summary>
@@ -87,7 +104,7 @@ namespace AdvancedClipboard.Server.Repositories
       this.mimeTypeResolver.GetMimeType(Path.GetExtension(filename));
 
       FileAccessTokenEntity tokenEntity = await this.CreateTokenIfNotExists(filename, context, userId);
-      BlobContainerClient azureContainer = await this.GetAzureContainer(userId);
+      BlobContainerClient azureContainer = await this.GetAzureContainerInternal(userId);
       BlobClient blob = azureContainer.GetBlobClient(filename);
       await blob.UploadAsync(content, overwrite);
 
@@ -116,9 +133,18 @@ namespace AdvancedClipboard.Server.Repositories
       return token;
     }
 
-    private async Task<BlobContainerClient> GetAzureContainer(Guid userid)
+    private async Task<BlobContainerClient> GetAzureContainerInternal(Guid userid)
     {
       string containerName = userid.ToString("N");
+      var containerClient = this.client.GetBlobContainerClient(containerName);
+      await containerClient.CreateIfNotExistsAsync();
+
+      return containerClient;
+    }
+
+    private async Task<BlobContainerClient> GetAzureThumbsContainerInternal(Guid userid)
+    {
+      string containerName = userid.ToString("N") + "-thumbs";
       var containerClient = this.client.GetBlobContainerClient(containerName);
       await containerClient.CreateIfNotExistsAsync();
 
