@@ -69,6 +69,15 @@ namespace AdvancedClipboard.Web.Repositories
         throw new Exception("Lane not Found");
       }
 
+      var items = (from cc in context.ClipboardContent
+                   where cc.LaneId == laneId
+                   select cc).ToList();
+      foreach (var item in items)
+      {
+        item.LaneId = null;
+        item.Lane = null;
+      }
+
       context.Remove(lane);
 
       await context.SaveChangesAsync();

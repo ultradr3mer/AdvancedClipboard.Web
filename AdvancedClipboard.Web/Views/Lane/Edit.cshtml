@@ -32,14 +32,7 @@
           </div>
           <div class="row mt-3">
             <div class="col-12 col-md-6 d-flex justify-content-start">
-              @if (!Model.HasItems)
-              {
-                <button class="btn btn-danger float-end mb-1 text-black" asp-controller="lane" asp-action="delete" type="submit">Delete<i class="bi bi-file-earmark-x-fill ms-2"></i></button>
-              }
-              else
-              {
-                <button class="btn btn-light float-end mb-1" asp-controller="lane" asp-action="delete" type="submit" disabled>Lane has Items<i class="bi bi-file-earmark-x-fill ms-2"></i></button>
-              }
+              <button class="btn btn-danger float-end mb-1 text-black" asp-controller="lane" asp-action="delete" type="submit">Delete<i class="bi bi-file-earmark-x-fill ms-2"></i></button>
             </div>
             <div class="col-12 col-md-6">
               <button class="btn btn-primary float-end mb-1 text-white" type="submit">Save<i class="bi bi-save ms-2"></i></button>
