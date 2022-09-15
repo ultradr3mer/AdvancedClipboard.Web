@@ -63,11 +63,11 @@ namespace AdvancedClipboard.Web.ApiControllers
 
 
     [HttpGet(nameof(GetWithContext))]
-    public async Task<ClipboardContainerGetData> GetWithContext(Guid? id = null)
+    public async Task<ClipboardContainerGetData> GetWithContext()
     {
       var userId = this.User.GetId();
 
-      var result = await this.clipboardRepository.GetWithContextAsync(id, userId);
+      var result = await this.clipboardRepository.GetWithContextAsync(null, userId);
 
       return result;
     }

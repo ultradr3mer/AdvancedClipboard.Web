@@ -78,16 +78,6 @@ namespace AdvancedClipboard.Web.ApiControllers
       return result;
     }
 
-    [HttpGet]
-    public async Task<IEnumerable<LaneGetData>> Get(Guid id)
-    {
-      var userId = this.User.GetId();
-
-      List<LaneGetData> result = await this.laneRepository.GetLanesForUser(userId, null);
-
-      return result;
-    }
-
     [HttpPost("PostLane")]
     public async Task<LaneGetData> Post(LanePostData data)
     {

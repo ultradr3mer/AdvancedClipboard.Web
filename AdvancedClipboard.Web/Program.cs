@@ -1,5 +1,4 @@
 using AdvancedClipboard.Server.Repositories;
-using AdvancedClipboard.Web.ApiControllers;
 using AdvancedClipboard.Web.Models;
 using AdvancedClipboard.Web.Models.Identity;
 using AdvancedClipboard.Web.Repositories;
@@ -22,43 +21,26 @@ builder.Services.AddScoped<MimeTypeResolver>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 var clientId = builder.Configuration.GetValue<string>("ClientId");
+
 builder.Services.AddSwaggerGen(options =>
 {
   options.SwaggerDoc("v1", new OpenApiInfo
   {
     Version = "v1",
-    Title = "Clipboard API"
+    Title = "Clipboard API",
   });
 
-  options.AddSecurityDefinition("msid", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+  options.AddServer(new OpenApiServer() { Description = "Azure Instance", Url = "https://advancedclipboard2.azurewebsites.net/" });
+  options.AddServer(new OpenApiServer() { Description = "Local Instance", Url = "https://localhost:7071/" });
+
+  options.AddSecurityDefinition("cookieAuth", new OpenApiSecurityScheme
   {
-    Type = Microsoft.OpenApi.Models.SecuritySchemeType.OAuth2,
-    Flows = new Microsoft.OpenApi.Models.OpenApiOAuthFlows
-    {
-      AuthorizationCode = new Microsoft.OpenApi.Models.OpenApiOAuthFlow
-      {
-        AuthorizationUrl = new System.Uri("https://localhost:7071/Identity/Account/Login?ReturnUrl=%2Fswagger"),
-        TokenUrl = new System.Uri("https://localhost:7071"),
-        Scopes = new Dictionary<string, string>
-                {
-                    { $"api://{clientId}/access", "access" }
-                }
-      }
-    }
+    Type = SecuritySchemeType.ApiKey,
+    In = ParameterLocation.Cookie,
+    Name = ".AspNetCore.Identity.Application"
   });
 
-  options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference {Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme, Id = "msid" }
-            },
-            new [] { $"api://{clientId}/access" }
-        }
-    });
-
-  //options.DocumentFilter<CustomSwaggerFilter>();
+  options.DocumentFilter<CustomSwaggerFilter>();
 
 });
 builder.Services.AddRazorPages();

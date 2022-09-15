@@ -33,11 +33,6 @@ namespace AdvancedClipboard.Web.ApiControllers
 
     #region Methods
 
-    public bool ThumbnailCallback()
-    {
-      return false;
-    }
-
     /// <summary>
     /// Gets an image thumbnail.
     /// </summary>
@@ -132,6 +127,11 @@ namespace AdvancedClipboard.Web.ApiControllers
       BlobClient blob = azureContainer.GetBlobClient(filename);
       Azure.Response<Azure.Storage.Blobs.Models.BlobDownloadInfo> info = await blob.DownloadAsync();
       return this.File(info.Value.Content, contentType);
+    }
+
+    private bool ThumbnailCallback()
+    {
+      return false;
     }
 
     #endregion Methods

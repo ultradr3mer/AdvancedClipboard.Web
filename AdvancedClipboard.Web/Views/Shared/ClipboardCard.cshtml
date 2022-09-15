@@ -61,7 +61,9 @@
       }
       else if (Model.Entry.ContentTypeId == ContentTypes.Image)
       {
-        <img class="clipboard-image" src="~/api/file/thumb/@Model.Entry.FileContentUrl" />
+        <a href="~/api/file/@Model.Entry.FileContentUrl">
+          <img class="clipboard-image" src="~/api/file/thumb/@Model.Entry.FileContentUrl" />
+          </a>
       }
       else if (Model.Entry.ContentTypeId == ContentTypes.File)
       {

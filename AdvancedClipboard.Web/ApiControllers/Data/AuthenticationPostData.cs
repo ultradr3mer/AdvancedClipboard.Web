@@ -1,0 +1,8 @@
+﻿namespace AdvancedClipboard.Web.ApiControllers.Data
+{
+  public class AuthenticationPostData
+  {
+    public string Email { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+  }
+}
